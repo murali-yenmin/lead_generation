@@ -1,0 +1,65 @@
+.rewards-card-info {
+  background: $brownB100;
+  padding: 32px;
+  @include flex;
+
+  .offer-desc {
+    width: 40%;
+    padding-right: 32px;
+    border-right: 1px solid $greyG75;
+  }
+
+  .offer-head {
+    @include text($size: $fs-base, $color: $black, $weight: $fw-medium);
+  }
+
+  .offers {
+    margin-top: 8px;
+    @include text($size: $fs-light, $weight: $fw-regular);
+  }
+
+  h6 {
+    @include text($size: $fs-base, $color: $black, $weight: $fw-bold);
+    margin-bottom: 8px;
+    line-height: $lh-base;
+  }
+
+  p {
+    @include text($size: $fs-light, $color: $greyG200, $weight: $fw-regular);
+    line-height: $lh-light;
+  }
+
+  .offer-info {
+    @include grid($columns: 4, $gap: 16px);
+    width: 60%;
+    padding-left: 32px;
+
+    .list {
+      @include flex;
+
+      .icon {
+        background: $white;
+        width: 40px;
+        height: 40px;
+        @include radius(50%);
+        @include flex($align: center, $justify: center);
+        margin-right: 16px;
+      }
+    }
+  }
+}
+
+@include respond(1300px) {
+  .rewards-card-info {
+    .offer-desc {
+      width: 50%;
+    }
+    .offer-info{
+      width: 50%;
+    }
+
+    .offer-info {
+      @include grid($columns: 2, $gap: 16px);
+    }
+  }
+}

@@ -1,0 +1,152 @@
+.landlord-info {
+    h4 { 
+        @include text($size: $fs-base, $weight: $fw-regular, $color: $black);          
+
+        &.title {
+            margin-bottom: 15px;
+        }
+    }
+    .card {
+
+        &:not(:last-child) {
+            margin-bottom: 24px;
+        }
+    }
+
+    .hidden-number {
+        @include flex($align: center);
+
+        .icon {
+            margin-left: 16px;
+
+            button {
+                width: 34px;
+                height: 34px;
+                border-radius: 4px;
+                background: $greyG50;
+                border: 0;
+                cursor: pointer;
+                @include flex($align: center, $justify: center);
+
+                svg {
+                    width: 16px;
+                }
+
+            }
+        }
+
+        span {
+            @include text($size: $fs-base, $weight: $fw-bold, $color: $black);
+        }
+    }
+
+    .card-body {
+        padding: 0;
+
+        .card-header {
+            padding: 22px 33px;
+        }
+
+        .card-body {
+            padding: 28px 40px;
+        }
+
+        .address-info {
+            padding-bottom: 40px;
+            border-bottom: 1px solid $greyG75;
+            margin-bottom: 30px;
+
+            h4 {
+                @include text($size: $fs-base, $weight: $fw-bold, $color: $black);
+                margin-bottom: 8px;
+            }
+
+            p {
+                @include text($size: $fs-base, $weight: 400, $color: $greyG100);
+                line-height: $lh-base;
+            }
+        }
+
+
+        h6 {
+            @include text($size: $fs-base, $weight: $fw-regular, $color: $greyG300);
+            margin-bottom: 7px;
+        }
+
+        h5 {
+            @include flex;
+            @include text($size: $fs-base, $weight: $fw-bold, $color: $black);
+
+            span {
+                padding-left: 5px;
+            }
+        }
+
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .date-view {
+
+            p {
+                @include text($size: $fs-light, $weight: $fw-regular, $color: $greyG300);
+                position: relative;
+                margin-bottom: 6px;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 6px;
+                    height: 6px;
+                    background: $blueB300;
+                    @include radius(50%);
+                    top: 3px;
+                    left: -10px;
+                }
+            }
+
+            h5 {
+                @include text($size: $fs-light, $weight: $fw-bold, $color: $blueB300);
+            }
+        }
+
+        .over-view-card {
+            padding: 0;
+            width: 100%;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .status-icon {
+            @include flex($align: center, $justify: center);
+        }
+    }
+
+    .lease-info {
+        @include flex($justify: space-between);
+
+        .status-icon {
+            gap: 6px;
+
+            span {
+                text-transform: capitalize;
+                width: max-content;
+            }
+        }
+    }
+}
+
+
+@include respond(980px) {
+    .landlord-info {
+        .card-body {
+            .grid-view {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    }
+}

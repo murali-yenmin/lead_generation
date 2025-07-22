@@ -1,0 +1,503 @@
+.auth-layout {
+  height: 100vh;
+  display: flex;
+
+  .app-logo {
+    padding: 45px 0 0 45px;
+    display: inline-block;
+    position: absolute;
+  }
+
+  .auth-forms {
+    width: 35%;
+    padding: 30px;
+
+    h1 {
+      font-size: $fs-xl;
+      font-weight: $fw-bold;
+      padding-bottom: 15px;
+    }
+  }
+
+  .auth-placeholder {
+    @include flex($align: center, $justify: center);
+    height: 100%;
+  }
+
+  .screen-container {
+    @include flex($align: center, $justify: center);
+    height: 100%;
+    width: 85%;
+    margin: 0 auto;
+
+    .auth-screen {
+      width: 100%;
+
+      form {
+        padding-top: 40px;
+      }
+
+      .submit-btn {
+        padding-top: 35px;
+      }
+
+      .line-wrapper {
+        text-align: center;
+        margin: 16px 0;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 9px;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background: $greyG75;
+        }
+
+        span {
+          position: relative;
+          padding: 0 10px;
+          background: $white;
+          color: $greyG100;
+        }
+      }
+
+      p {
+        color: $greyG100;
+        line-height: 23px;
+      }
+
+      .back-auth {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  .forgot {
+    @include flex($justify: flex-end);
+
+    p {
+      a {
+        line-height: 23px;
+      }
+    }
+  }
+}
+
+.auth-bg {
+  width: 65%;
+  height: 100%;
+  position: relative;
+  @include linearGradient($startColor: $white,
+    $endColor: $greyG25,
+    $angle: 180deg,
+    $startPosition: 0%,
+    $endPosition: 100%);
+
+  .slider-content {
+    text-align: center;
+
+    li {
+      font-size: $fs-xxl;
+      font-weight: 400;
+      line-height: 55px;
+      color: $greyG300;
+
+      span {
+        font-weight: $fw-bold;
+      }
+    }
+
+    .slick-dots {
+      bottom: -50px;
+
+      li {
+        margin: 0 1px;
+
+        button {
+          &:before {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .slider-grp {
+    width: 100%;
+    position: absolute;
+    bottom: 120px;
+  }
+}
+
+//SignUp
+.validation {
+  margin-bottom: 10px;
+  position: relative;
+  top: -12px;
+
+  span {
+    @include radius(30px);
+    color: $greyG100;
+    display: inline-block;
+    margin: 0 10px 10px 0;
+    font-size: $fs-base;
+
+    img {
+      position: relative;
+      top: 4px;
+      margin-right: 5px;
+    }
+
+    &.valid {
+      color: $brownB300;
+    }
+  }
+}
+
+.privacy-btn {
+  font-family: $font-primary;
+  font-size: $fs-base;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+
+//Policy Page
+.policy-content {
+  padding: 5px 0 5px 0;
+  border: 1px solid $greyG75;
+  border-right-width: 5px;
+  margin-top: 40px;
+  @include radius(16px);
+
+  .content-scroll {
+    overflow: auto;
+    height: 500px;
+    padding: 0 35px;
+  }
+
+  p {
+    font-size: $fs-base;
+    color: $greyG100;
+    line-height: 23px;
+  }
+
+  h3 {
+    font-size: $fs-base;
+    color: $greyG300;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 5px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      @include radius(30px);
+      background: $brownB300;
+    }
+  }
+
+  .policy-item {
+    padding: 13px 0;
+  }
+
+  .privacy-check {
+    label {
+      font-size: $fs-base;
+      line-height: $lh-base;
+    }
+  }
+}
+
+.policy-modal {
+  padding: 10px;
+
+  .term-con-header {
+    h2 {
+      font-size: $fs-md;
+      color: $primary;
+      font-weight: $fw-medium;
+    }
+
+    p {
+      color: $greyG100;
+    }
+  }
+
+  .policy-content {
+    margin-bottom: 30px;
+  }
+}
+
+.policy-container {
+  .screen-container {
+    .auth-screen {
+      form {
+        padding-top: 0;
+      }
+    }
+  }
+
+  .accept-policy {
+    padding-top: 40px;
+  }
+}
+
+.privacy-check {
+  padding: 16px 0 40px 0;
+}
+
+.lottie-file {
+  width: 130px;
+  height: 120px;
+  position: relative;
+  left: -30px;
+}
+
+.change-action {
+  @include flex($justify: space-between, $align: center);
+  position: relative;
+  top: -15px;
+
+  .resend-code {
+    border: 0;
+
+    &:hover {
+      &:not(:disabled) {
+        color: $primaryDark !important;
+      }
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+}
+
+.reset-form {
+  .change-action {
+    top: 0;
+    margin: 15px 0 25px;
+  }
+
+  .otp-input-wrapper {
+    margin-bottom: 0;
+  }
+
+  .validation-grp {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.verify-account {
+  .change-action {
+    position: unset;
+    margin-top: 15px;
+  }
+
+  .error-container {
+    padding-top: 10px;
+  }
+}
+
+.submit-reset-btn {
+  padding-top: 15px;
+}
+
+.sign-in {
+  .Password-input {
+    .form-control {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+//Responsive
+@include respond(1830px) {
+  .auth-placeholder {
+    img {
+      position: relative;
+      top: -45px;
+    }
+  }
+
+  .policy-content {
+    .content-scroll {
+      height: 450px;
+    }
+  }
+}
+
+@include respond(1540px) {
+  .auth-placeholder {
+    img {
+      width: 60%;
+      position: relative;
+      top: -45px;
+    }
+  }
+
+  .auth-layout {
+    .app-logo {
+      padding: 30px 0 0 30px;
+    }
+  }
+
+  .policy-content {
+    padding: 5px 0 5px 0;
+    margin-top: 20px;
+
+    .content-scroll {
+      height: 360px;
+    }
+  }
+
+  .auth-bg {
+    .slider-grp {
+      bottom: 80px;
+    }
+  }
+
+  .validation {
+    span {
+      line-height: 16px;
+      font-size: $fs-light;
+    }
+  }
+
+  .validation-grp {
+    @include flex();
+  }
+
+  .auth-layout {
+    .auth-forms {
+      overflow: auto;
+    }
+  }
+
+  .screen-container {
+    &.sign-up {
+      align-items: self-start;
+
+      .auth-screen {
+        padding-bottom: 40px;
+      }
+    }
+  }
+}
+
+.policy-container {
+  height: 100%;
+
+  .auth-screen {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .policy-content {
+      height: max-content;
+      overflow: auto;
+
+      .content-scroll {
+        height: 100%;
+      }
+    }
+  }
+}
+
+//Laptop: Max-width:1336px / Min-height:768
+@include responsiveDevice(1366px, 768px) {
+  .policy-content {
+    .content-scroll {
+      height: 320px;
+      padding: 0 35px;
+    }
+  }
+}
+
+//Laptop: Max-width:1280px / Min-height:768
+@include responsiveDevice(1280px, 768px) {
+  html {
+    font-size: 90%;
+  }
+
+  .policy-content {
+    .content-scroll {
+      height: 250px;
+      padding: 0 35px;
+    }
+  }
+}
+
+@include respond(md) {
+  .auth-layout {
+    display: block;
+    height: auto;
+
+    .auth-bg {
+      height: auto;
+      width: 100%;
+      @include linearGradient($startColor: $white,
+        $endColor: $greyG25,
+        $angle: 91.07deg,
+        $startPosition: -10.37%,
+        $endPosition: 99.66%);
+
+      .auth-placeholder,
+      .slider-grp {
+        display: none;
+      }
+
+      .app-logo {
+        padding: 30px 0 30px 35px;
+        position: relative;
+      }
+    }
+
+    .auth-forms {
+      width: 100%;
+      padding: 35px 0;
+
+      .policy-container {
+        height: calc(100vh - 181px);
+      }
+    }
+  }
+}
+
+@include respond(xs) {
+  .otp-input-container {
+    gap: 3px;
+  }
+
+  .auth-layout {
+    .screen-container {
+      .auth-screen {
+        form {
+          padding-top: 30px;
+        }
+      }
+    }
+  }
+}
+
+//Min-width screen
+@include min-width(1540px) {
+  .verify-account {
+    .otp-input-container {
+      .otp-input {
+        width: 100% !important;
+        height: 45px;
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.payments-wrapper {
+    .payments-history {
+
+        .table-filter {
+            .payment-download {
+                width: 240px;
+                display: block;
+
+                .primary-btn {
+                    width: 240px;
+                    @include radius(23px);
+                    max-height: 48px;
+
+                }
+            }
+        }
+    }
+}

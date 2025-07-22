@@ -1,0 +1,119 @@
+.credit-card-screen-wrapper {
+  .card-option-sec {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      max-width: 150px;
+      height: 45px;
+    }
+  }
+
+  .category {
+    padding: 2px 16px;
+    min-width: 93px;
+    background: $greyG10;
+    line-height: 22px;
+    @include radius(32px);
+    @include text($size: $fs-light, $weight: $fw-medium, $align: center);
+  }
+
+  .categoryTypeOne {
+    @include text($size: $fs-light, $weight: $fw-medium, $align: center, $color: $greenG300);
+    background: $greenG25;
+  }
+
+  .categoryTypeTwo {
+    @include text($size: $fs-light, $weight: $fw-medium, $align: center, $color: $blueB300);
+    background: $blueB50;
+  }
+
+  .categoryTypeThree {
+    @include text($size: $fs-light, $weight: $fw-medium, $align: center, $color: $orangeO100);
+    background: $orangeO50;
+  }
+
+  .table-filter{
+    .search-field{
+      order: 0;
+    }
+    .filter-btn{
+      order:1;
+    }
+    button{
+      order: 2;
+    }
+    .payment-download{
+      order: 3;
+      min-width: 154px;
+      button{
+        @include radius(25px);
+        height: 50px;
+      }
+    }
+  }
+}
+
+.card-form {
+  .card-title{
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  .card {
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+
+    &.form {
+      .card-body {
+        @include grid($columns: 2, $gap: 24px);
+      }
+    }
+  }
+
+  .card-body {
+    padding: 30px;
+
+    .form-control {
+      margin: 0;
+    }
+  }
+
+  .offer-list-card {
+    button {
+      width: 50px;
+      height: 50px;
+      @include radius(50%);
+      margin-left: 16px;
+
+      .icon {
+        @include flex($align: center, $justify: center);
+      }
+    }
+
+    .offer-list {
+      @include flex($align: center, $justify: center);
+
+      &:not(:last-child) {
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  .actionBtn {
+    .card-body {
+      @include flex($align: center, $justify: flex-end);
+
+      button {
+        max-width: 174px;
+        max-height: 45px;
+
+        &:not(:last-child) {
+          margin-right: 22px;
+        }
+      }
+    }
+  }
+}

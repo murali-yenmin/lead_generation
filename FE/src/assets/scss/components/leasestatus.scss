@@ -1,0 +1,329 @@
+.status-card {
+  margin: 74px auto 0;
+  max-width: fit-content;
+
+  h1 {
+    margin-bottom: 26px;
+    @include text($size: $fs-md, $color: $greyG300, $weight: $fw-medium);
+  }
+
+  .rent-detail {
+    max-width: 600px;
+    width: 600px;
+  }
+
+  .card-body {
+    padding: 0;
+
+    .lease-status {
+      padding: 28px 33px;
+
+      .payee-detail {
+        @include flex($align: baseline, $justify: space-between);
+        gap: 50px;
+        border-bottom: 1px solid $greyG100;
+
+        .dropdown-container {
+          .dropdown-btn {
+            position: relative;
+            right: -10px;
+          }
+        }
+
+        .payee-info {
+          padding-bottom: 19px;
+
+          h6 {
+            font-size: $fs-base;
+            font-weight: $fw-medium;
+            color: $greyG300;
+            padding-bottom: 4px;
+          }
+
+          p {
+            font-size: $fs-base;
+            font-weight: $fw-regular;
+            color: $greyG100;
+            line-height: 20px;
+          }
+        }
+        .dot-svg {
+          .dropdown-container {
+            .dropdown-btn {
+              svg {
+                rotate: 90deg;
+                height: 8px;
+                width: 15px;
+              }
+            }
+          }
+        }
+      }
+
+      .rent-date {
+        @include flex($align: center, $justify: space-between);
+        padding: 30px 0px 23px 0px;
+        gap: 50px;
+
+        .date-wrapper {
+          width: 100%;
+          @include flex($justify: space-between);
+          gap: clamp(30px, 5vw, 50px);
+          padding-left: 10px;
+        }
+
+        .detail {
+          font-size: $fs-base;
+          font-weight: $fw-regular;
+
+          &.due-date {
+            color: $blueB300;
+            position: relative;
+
+            &::before {
+              content: '';
+              position: absolute;
+              left: -10px;
+              top: 4px;
+              display: inline-block;
+              width: 6px;
+              height: 6px;
+              @include radius($radius: 25px);
+              background-color: $blueB300;
+              margin-right: 5px;
+              vertical-align: middle;
+            }
+          }
+
+          &.process-date {
+            color: $greenG300;
+
+            &::before {
+              background-color: $greenG300;
+            }
+          }
+
+          p {
+            font-size: $fs-base;
+            font-weight: $fw-regular;
+            color: $greyG300;
+            padding-bottom: 4px;
+          }
+
+          span {
+            font-weight: $fw-bold;
+          }
+        }
+
+        .visa-info {
+          @include flex($align: center, $justify: space-between);
+          gap: 16px;
+
+          .visa-detail {
+            width: max-content;
+          }
+        }
+      }
+
+      .payment {
+        @include flex($justify: space-between, $align: center);
+        gap: 30px;
+
+        .card-btn {
+          width: 100%;
+
+          &.expired {
+            button {
+              background-color: $greyG50;
+              color: $greyG100;
+            }
+          }
+
+          &.review {
+            button {
+              background-color: $greyG50;
+              color: $greyG100;
+            }
+          }
+
+          &.approved {
+            button {
+              background-color: $primary;
+              color: $white;
+            }
+          }
+
+          button {
+            transition: background-color 0.3s ease, color 0.3s ease;
+          }
+        }
+
+        .charges {
+          h6 {
+            font-weight: $fw-bold;
+            font-size: $fs-sm;
+            line-height: 22px;
+          }
+
+          p {
+            font-size: $fs-xm;
+            font-weight: $fw-regular;
+            color: $greyG100;
+            line-height: 16px;
+            width: max-content;
+          }
+        }
+
+        .payment-mode {
+          h6 {
+            background: $greyG50;
+            padding: 10px 22px;
+            font-weight: $fw-medium;
+            font-size: $fs-light;
+            border-radius: 20px;
+            margin-top: 8px;
+            width: max-content;
+          }
+        }
+
+        .payment-wrapper {
+          width: 100%;
+          @include flex($align: center, $justify: space-between);
+          gap: 30px;
+        }
+      }
+    }
+  }
+
+  .status-msg {
+    padding: 20px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    @include flex($align: center, $justify: center);
+    gap: 4px;
+
+    &.rejected {
+      background-color: $redR50;
+      p {
+        color: $redR300;
+      }
+    }
+
+    &.review {
+      background-color: $brownB55;
+      p {
+        color: #6b4700;
+      }
+    }
+
+    &.pending {
+      background-color: $brownB55;
+      p {
+        color: #6b4700;
+      }
+    }
+
+    &.approved {
+      background-color: $greenG50;
+      p {
+        color: $greenG300;
+      }
+    }
+  }
+}
+
+@include respond(660px) {
+  .status-card {
+    margin: 0;
+    margin-top: 5px;
+
+    .rent-detail {
+      width: calc(100vw - 60px);
+    }
+  }
+}
+
+@include respond(625px) {
+  .status-card {
+    .card-body {
+      .lease-status {
+        .rent-date {
+          gap: 23px;
+          @include flex($align: flex-start, $direction: column);
+
+          .date-wrapper {
+            justify-content: unset;
+            align-items: flex-start;
+            gap: 70px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond(570px) {
+  .status-card {
+    .card-body {
+      .lease-status {
+        .payment {
+          flex-direction: column-reverse;
+          gap: 23px;
+
+          .payment-wrapper {
+            justify-content: unset;
+            gap: 70px;
+
+            .charges {
+              order: 2;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond(420px) {
+  .status-card {
+    .card-body {
+      .lease-status {
+        .rent-date {
+          .date-wrapper {
+            justify-content: space-between;
+            gap: unset;
+          }
+        }
+
+        .payment {
+          .payment-wrapper {
+            justify-content: space-between;
+            gap: unset;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include respond(370px) {
+  .status-card {
+    .card-body {
+      .lease-status {
+        .rent-date {
+          .date-wrapper {
+            @include flex($direction: column);
+            gap: 23px;
+          }
+        }
+
+        .payment {
+          .payment-wrapper {
+            @include flex($align: flex-start, $direction: column);
+            gap: 23px;
+          }
+        }
+      }
+    }
+  }
+}

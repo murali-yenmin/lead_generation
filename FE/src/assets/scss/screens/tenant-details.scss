@@ -1,0 +1,178 @@
+.tenant-info {
+  .verifiedIcon {
+    margin-right: 5px;
+  }
+
+  p {
+    @include flex;
+    @include text($size: $fs-base, $weight: $fw-medium, $color: $black);
+
+    span {
+      padding-left: 5px;
+    }
+
+    &.title {
+      margin-bottom: 15px;
+    }
+  }
+
+  .over-view {
+    @include flex;
+  }
+
+  .setting-list {
+    .card-body {
+      padding: 0 25px;
+    }
+    .list {
+      @include flex;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $border;
+      }
+    }
+
+    .over-view-card {
+      max-width: 100%;
+      padding: 30px 0px;
+
+      p {
+        margin-bottom: 0;
+        @include text($size: 18px, $weight: $fw-medium, $color: $black);
+      }
+
+      h6 {
+        @include text($size: 14px, $weight: $fw-regular, $color: $black);
+      }
+    }
+  }
+}
+
+.tenant-info-card {
+  @include flex;
+
+  background: $white;
+  @include radius(16px);
+  margin-bottom: 25px;
+
+  .card-body {
+    width: 100%;
+    @include flex;
+    padding: 0;
+  }
+
+  &.details {
+    .card-section {
+      &:first-child {
+        max-width: 314px;
+        border-right: 1px solid $border;
+        @include flex($align: center, $justify: center);
+
+        div {
+          @include flex($align: center, $justify: center, $direction: column);
+        }
+
+        h6 {
+          @include text($size: $fs-md, $weight: $fw-bold, $color: $black);
+          margin-top: 15px;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  .card-section {
+    width: 100%;
+    padding: 30px;
+
+    .profile {
+      width: 60px;
+      height: 60px;
+      display: block;
+      background: $blueB50;
+      color: $blueB300;
+      @include radius(50%);
+
+      .avatar-image {
+        width: 60px;
+        height: 60px;
+        @include radius(50%);
+        object-fit: cover;
+      }
+
+      p {
+        @include text($size: $fs-md, $weight: $fw-bold, $color: $blueB300);
+      }
+    }
+
+    &.grid-view {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px; 
+    }
+
+    .pay-type {
+      width: 85px;
+
+      .status-progress {
+        background: $brownB100;
+      }
+    }
+
+    h6 {
+      @include text($size: $fs-base, $weight: $fw-regular, $color: $greyG300);
+      line-height: $lh-base;
+      margin-bottom: 7px;
+    }
+
+    h5 {
+      @include flex;
+      @include text($size: $fs-base, $weight: $fw-bold, $color: $black);
+      line-height: 22px;
+
+      span {
+        padding-left: 5px;
+      }
+    }
+  }
+}
+
+@include respond(1380px) {
+  .tenant-info-card {
+    &.details {
+      .card-section {
+        &:first-child {
+          max-width: 175px;
+        }
+      }
+    }
+  }
+}
+
+@include respond(1080px) {
+  .tenant-info-card {
+    &.details {
+      .card-section {
+        &:first-child {
+          max-width: 100%;
+          border-right: 0;
+          border-bottom: 1px solid $border;
+        }
+      }
+    }
+
+    .card-body {
+      flex-direction: column;
+    }
+  }
+}
+
+@include respond(980px) {
+  .tenant-info-card {
+    .card-section {
+      &.grid-view {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+}

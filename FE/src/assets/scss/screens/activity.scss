@@ -1,0 +1,91 @@
+.activity-wrapper{
+    .table-body {
+        &:hover {
+            z-index: 1;
+        }
+        
+        .table-body-cell   { 
+            .email-field {
+                cursor: pointer;
+                width: 200px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+.activity-section {
+    background: $brownB100;
+    padding: 32px;
+    @include flex;
+
+    h6 {
+        @include text($size: $fs-base, $color: $black, $weight: $fw-medium);
+        text-transform: capitalize;
+        margin-bottom: 8px;
+        line-height: $lh-base;
+    }
+
+    p {
+        @include text($size: $fs-light, $color: $greyG200, $weight: $fw-regular);
+        line-height: $lh-light;
+    }
+
+    .activity-desc {
+        width: 40%;
+        padding-right: 32px;
+        border-right: 1px solid $greyG75;
+
+
+    }
+
+    .activity-info {
+        width: 60%;
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+
+        .list {
+            @include flex;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            @include radius(50%);
+            background: $white;
+            margin-right: 16px;
+            @include flex($align: center, $justify: center);
+        }
+
+        h6 {
+            margin-bottom: 0;
+        }
+    }
+
+    .activity-action {
+        padding: 0;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        width: auto;
+        height: auto;
+        @include flex;
+    }
+
+   
+}
+
+@include respond(1340px){
+    .activity-section {
+        .activity-desc{
+            width: 50%;
+        }
+        .activity-info{
+            width: 50%;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}

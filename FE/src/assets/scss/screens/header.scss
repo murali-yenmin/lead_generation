@@ -1,0 +1,24 @@
+.header {
+  height: $header-height;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 32px;
+  padding-right: 20px;
+}
+
+//Mobile Header
+@include respond(md) {
+  .header {
+    padding: 0 30px;
+    @include flex($justify: space-between);
+    @include linearGradient(
+      $startColor: $white,
+      $endColor: $greyG25,
+      $angle: 91.07deg,
+      $startPosition: -10.37%,
+      $endPosition: 99.66%
+    );
+    height: 88px;
+  }
+}

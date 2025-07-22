@@ -1,0 +1,46 @@
+.responiveAlert{
+    .modal{
+        padding: 33px;
+        max-width: 462px;
+       margin: 0 5%;
+    }
+    .modal-content {
+     position: relative;
+     overflow: hidden !important;
+     height: 100%;
+    }
+    .modal-body {
+        @include flex($align:center, $justify:center, $direction:column);
+
+        svg{
+         width: 100%;
+         height: 100%;
+        }
+    }
+    .closeIcon{
+       position: absolute;
+       right: 0;
+       top:0;
+       background: transparent;
+       border: none;
+       outline: none;
+       cursor: pointer;
+    }
+    h3{
+        @include text($size:$fs-xl, $weight:$fw-bold, $color:$primary);
+        margin-top: 19px;
+        margin-bottom: 16px;
+    }
+    p{
+        @include text($size:$fs-sm, $weight:$fw-bold, $color:$greyG300, $align:center);
+    }
+}
+
+@include respond(425px){
+
+    .responiveAlert{
+        .modal{
+            padding: 20px;
+        }}
+
+}

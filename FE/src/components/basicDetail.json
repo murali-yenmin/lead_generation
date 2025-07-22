@@ -1,0 +1,35 @@
+{
+    "basicDetails": {
+      "landlordName": "Katherine Landlord",
+      "address": "12345 Redwood Grove Lane, Unit 408B, Building 9 Cypress Hills Corporate, Plaza Los Angeles, California, 90075",
+      "rentAmount": "$1200",
+      "dueDate": "02-01-2025",
+      "processingDate":"01-29-2025",
+      "contact": "+91 9876543210",
+      "email": "katy_landlord97@gmail.com"
+    },
+     "paymentData": {
+      "paymentType": "Auto Payment",
+      "description": "Hassle-free rent! Your rent will be auto-debited & sent to your landlord securely!",
+      "paymentTitle": "Full Payment",
+      "amount": "$1200",
+      "dueDate": "02-01-2025"
+    },
+     "paymentMethod": {
+      "CardName": "JHONDOE",
+      "CardNumber": "**** **** **** 7830"
+    },
+       "paymentDetails": {
+      "paymentMethod": "Bank Account",
+      "payeeName": "Katherine",
+      "accountNumber": "1234567890",
+      "routingNumber": "02350923434"
+    },
+      "leaseDetails": {
+    "expiryDate": "28 Jan,2025",
+    "isApproved": true,
+    "expiringSoon": "Your lease will expire in 5 days! Renew and update the latest expiration date to continue making rent payments; otherwise, payments will be deactivated.",
+    "expired": "Your lease has expired! Please renew and update the latest expiration date to continue making rent payments. Otherwise, payments will be deactivated."
+  }
+  }
+  

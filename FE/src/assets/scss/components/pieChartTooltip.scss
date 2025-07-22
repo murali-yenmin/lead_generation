@@ -1,0 +1,23 @@
+.custom-tool-tip-wrapper {
+  background: $white;
+  padding: 9px;
+
+  @include radius(9px);
+  @include flex($align: baseline);
+  gap: 5px;
+  .dot {
+    @include radius(15px);
+    height: 9px;
+    width: 9px;
+  }
+
+  .label {
+    @include text($size: $fs-light, $weight: $fw-medium, $align: left);
+    line-height: 12px;
+  }
+  .value {
+    @include text($size: $fs-base, $weight: $fw-bold, $align: left);
+    line-height: 12px;
+    margin-top: 5px;
+  }
+}

@@ -1,0 +1,112 @@
+.verifiedIcon {
+  width: 16px;
+  height: 16px;
+  @include flex($align: center, $justify: center);
+}
+
+.payment-method-list {
+  @include flex;
+
+  div {
+    height: 24px;
+    padding: 0 8px;
+    @include radius(16px);
+    background: $greyG100;
+    @include flex($align: center, $justify: center);
+
+    p {
+      @include text($size: $fs-light, $weight: $fw-regular, $color: $white);
+    }
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    &.ach {
+      background: $brownB100;
+
+      p {
+        color: $primary !important;
+      }
+
+      &.active {
+        background: $brownB300;
+
+        p {
+          color: $white !important;
+        }
+      }
+    }
+
+    &.cc {
+      background: $blueB50;
+
+      p {
+        color: $blueB300 !important;
+      }
+
+      &.active {
+        background: $blueB300;
+
+        p {
+          color: $white !important;
+        }
+      }
+    }
+
+    &.dc {
+      p {
+        color: $greenG100 !important;
+      }
+
+      background: $greenG25;
+
+      &.active {
+        background: $greenG100;
+
+        p {
+          color: $white !important;
+        }
+      }
+    }
+  }
+}
+
+.tenants {
+  .table-body-cell {
+    @include text($size: $fs-light, $weight: $fw-regular, $color: $greyG100);
+    line-height: 13px;
+
+    .row {
+      @include flex($align: center, $justify: center);
+
+      .verifiedIcon {
+        margin-right: 10px;
+      }
+    }
+
+    .email-field {
+      cursor: pointer;
+      width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .payment-method-list {
+      min-width: auto;
+    }
+  }
+
+  .email-field {
+    cursor: pointer;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .payment-method-list {
+    min-width: 135px;
+  }
+}

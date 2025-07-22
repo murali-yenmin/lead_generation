@@ -1,0 +1,71 @@
+.admin-screen {
+  .admin-option-sec { 
+    @include flex($justify:flex-end);
+    button {
+      @include text($size: $fs-base, $color: $white, $weight: $fw-medium);
+      line-height: $lh-base;
+      min-width: 150px;
+      height: 50px;
+      @include radius(25px);
+    }
+  }
+
+  .email-field {
+    cursor: pointer;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .table-filter{
+    .search-field{
+      order:0;
+    }
+    .filter-btn{
+      order:1;
+    }
+    button{
+      order:2;
+    }
+    .admin-option-sec{
+      order:3;
+    }
+  }
+
+  .admin-form-sec {
+    background: $white;
+    @include radius(15px);
+    padding: 30px;
+
+    .admin-form {
+      .form-control {
+        margin-bottom: unset;
+      }
+      @include grid($columns: 2, $gap: 30px);
+    }
+    .btn-sec {
+      @include flex($align:center, $justify:end);
+      gap: 22px;
+      margin-top: 30px;
+      button {
+        max-width: 174px; 
+        max-height: 45px;
+        @include text($size: $fs-base, $color:$white, $weight:$fw-medium);
+        &.secondary-btn{
+          background: transparent;
+          border: 1px solid $greyG75;
+          color: $greyG100;
+        }
+      }
+    }
+  }
+
+  @include respond(sm) {
+    .admin-form-sec {
+      .admin-form {
+        @include grid($columns: 1, $gap: 30px);
+      }
+    }
+  }
+}

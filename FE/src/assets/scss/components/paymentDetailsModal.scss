@@ -1,0 +1,104 @@
+.payment-popup {
+  .modal {
+    @include radius(10px);
+    border: none;
+    padding: 0;
+  }
+
+  .payment-popup-icon {
+    @include text($align: center);
+    margin-bottom: 20px;
+    margin-top: 30px;
+
+    h1 {
+      margin-top: 20px;
+      text-transform: capitalize;
+    }
+  }
+
+  .payment-popup-content {
+    overflow-y: auto;
+    max-height: 54vh;
+    padding: 0 40px;
+
+    .details:first-of-type {
+      padding-top: 33px;
+    }
+
+    .details {
+      padding-top: 53px;
+      padding-bottom: 23px;
+      width: 100%;
+      border-bottom: 1px dashed $greyG50;
+      @include flex($direction: column);
+      gap: 20px;
+
+      .details-content {
+        @include flex($direction: column);
+        gap: 20px;
+
+        .row {
+          @include text($size: $fs-light, $align: end, $color: $greyG100);
+          @include flex($justify: space-between, $align: center);
+          line-height: 18px;
+
+          .card-details {
+            text-align: start;
+            margin-left: 20px;
+          }
+
+          .card-mode {
+            @include flex($align: center);
+          }
+        }
+      }
+    }
+
+    .payment-total {
+      padding: 30px 0;
+      @include flex($justify: space-between);
+      @include text($color: $greyG100);
+
+      .totalAmount {
+        font-weight: 600;
+        color: $black;
+      }
+    }
+
+    .details-btn {
+      @include grid($columns: 2, $gap: 8px);
+
+      button {
+        cursor: pointer;
+        @include text($size: $fs-sm, $weight: $fw-medium, $align: center, $color: $white);
+        width: 100%;
+        @include radius(30px);
+        font-size: 16px;
+        max-height: 40px;
+      }
+
+      .back-btn {
+        margin: 0;
+        background: none;
+        color: $greyG100;
+        border: 1px solid $greyG75;
+        margin-top: 0;
+      }
+
+      .print-btn {
+        background-color: $brownB55;
+        border: none;
+        @include text($color: $brownB300, $align: center);
+
+        &:hover {
+          background: $primary;
+          color: $white;
+        }
+      }
+    }
+
+    .back-btn {
+      margin-bottom: 10px;
+    }
+  }
+}
