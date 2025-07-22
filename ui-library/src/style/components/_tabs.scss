@@ -1,0 +1,29 @@
+.tabs-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabs-header {
+  display: flex;
+
+  .tab-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    color: $greyG300;
+    background-color: transparent;
+
+    &.active {
+      background: $blueB300;
+      color: $white;
+      font-weight: $fw-medium;
+    }
+
+    &:hover {
+      background: lighten($blueB300, 40%);
+    }
+  }
+}

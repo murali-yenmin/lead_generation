@@ -1,0 +1,193 @@
+.react-select__control {
+  padding: 6px 16px;
+  border-radius: 10px !important;
+  border: 1px solid $greyG100 !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  .react-select__value-container {
+    padding: 0;
+    overflow: visible !important;
+  }
+
+  .react-select__placeholder {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    display: block !important;
+    transition: 0.3s ease-in-out;
+    @include text($size: $fs-base, $weight: $fw-regular, $color: $greyG100);
+  }
+
+  .react-select__input-container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .react-select__indicator-separator {
+    display: none;
+  }
+
+  .react-select__menu {
+    div {
+      &:hover {
+        background: #eff8ff;
+      }
+    }
+  }
+}
+
+.react-select__control--is-focused {
+  border-color: $primaryDark !important;
+  overflow: visible !important;
+
+  .react-select__placeholder {
+    top: -16px;
+    padding: 0 4px;
+    left: 0px;
+    margin: 0 !important;
+    background: $white;
+    @include text($size: 14px, $color: $primaryDark);
+  }
+}
+
+.field-error {
+  .react-select__control {
+    border-color: $redR300 !important;
+  }
+}
+.react-select__option {
+  &[aria-selected='true'] {
+    background-color: $blueB50 !important;
+    color: $blueB300 !important;
+  }
+
+  &:hover {
+    background-color: $greyG10 !important;
+    color: $greyG300 !important;
+  }
+}
+
+.select-dropdown {
+  min-width: 200px;
+  position: relative;
+
+  button.label {
+    min-width: 200px;
+    text-align: left;
+    padding: 12px 15px;
+    background: transparent;
+    @include radius(7px);
+    border: 1px solid $greyG75;
+    position: relative;
+    cursor: pointer;
+
+    svg {
+      position: absolute;
+      top: 17px;
+      right: 13px;
+    }
+  }
+
+  .dropdown-list-wrapper {
+    background: $white;
+    @include flex($direction: column);
+    padding: 10px 0;
+    position: absolute;
+    z-index: 3;
+    top: 48px;
+    @include radius(8px);
+    width: 100%;
+    border: 1px solid $greyG75;
+
+    .search-wrapper {
+      position: relative;
+      padding: 0 15px;
+      margin: 0 15px 10px 15px;
+      height: 30px;
+      @include radius(6px);
+      border: 1px solid $greyG100;
+      @include flex($align: center);
+
+      input {
+        @include webkitWidth;
+        border: 0;
+        padding: 1px 20px 0 0;
+
+        &:focus-visible {
+          outline: 0;
+        }
+      }
+
+      svg {
+        position: absolute;
+        right: 13px;
+        top: 7px;
+      }
+    }
+
+    ul {
+      li {
+        &.date-range-li {
+          @include flex($direction: column);
+          margin-top: 10px;
+          border-top: 1px solid $greyG75;
+
+          .date-range-label {
+            padding: 10px 15px;
+            font-size: $fs-light;
+            color: $greyG100;
+            font-weight: $fw-medium;
+          }
+        }
+
+        button {
+          padding: 8px 20px;
+          border: 0;
+          background: transparent;
+          text-align: left;
+          cursor: pointer;
+          @include webkitWidth;
+          color: $greyG100;
+          font-weight: $fw-medium;
+          color: $greyG300;
+
+          &:hover,
+          &.selected {
+            background: $blueB50;
+            color: $blueB300;
+          }
+        }
+
+        .date-picker-wrapper {
+          margin: 0 15px;
+
+          .input-label {
+            &:not(.input-focused) {
+              top: 13px;
+              left: 10px;
+            }
+            &.input-focused {
+              top: -6px;
+            }
+            font-size: $fs-light;
+          }
+
+          .calendar-icon {
+            width: 42px;
+            height: 37px;
+          }
+        }
+
+        .rmdp-container {
+          .date-input {
+            height: 38px;
+            @include radius(6px);
+            padding-right: 42px;
+            padding-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}

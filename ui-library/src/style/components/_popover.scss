@@ -1,0 +1,114 @@
+.pop-over {
+  position: relative;
+  display: inline-block;
+  margin: 300px;
+
+  .popover-cont {
+    position: absolute;
+    background: $textWhite;
+    // border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0);
+    min-width: 200px;
+    z-index: 10;
+
+    &.bottom {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 10px;
+      &::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 90px;
+        border: none;
+        border-top: none;
+        border-left: none;
+        background-color: $textWhite;
+        rotate: 45deg;
+        top: -6px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        z-index: -5;
+      }
+    }
+
+    &.top {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 10px;
+      &::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 90px;
+        bottom: -6px;
+        border: none;
+        border-top: none;
+        border-left: none;
+        background-color: $textWhite;
+        rotate: 45deg;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        z-index: -1;
+      }
+    }
+    &.left {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-right: 10px;
+      &::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        right: -7px;
+        bottom: -6px;
+        border: none;
+        border-top: none;
+        border-left: none;
+        background-color: $textWhite;
+        rotate: 45deg;
+        top: 35px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        z-index: -1;
+      }
+    }
+
+    &.right {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: 10px;
+      &::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: -7px;
+        bottom: -6px;
+        border: none;
+        border-top: none;
+        border-left: none;
+        background-color: $textWhite;
+        rotate: 45deg;
+        top: 35px;
+        z-index: -1;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+    }
+
+    .popover-title {
+      font-size: 25px;
+      background-color: $greyG75;
+      padding: 10px;
+    }
+    .popover-body {
+      font-size: 18px;
+      background-color: $textWhite;
+      padding: 10px;
+    }
+  }
+}

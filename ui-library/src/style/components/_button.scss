@@ -1,0 +1,114 @@
+.button {
+  width: 100%;
+  border: 0;
+  height: 56px;
+  border-radius: 28px;
+  font-size: $fs-sm;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+
+  &.primary-btn {
+    border: 1px solid $primary;
+    background: $primary;
+    color: $textWhite;
+
+    &:hover {
+      background: $textWhite !important;
+      color: $primary !important;
+    }
+  }
+
+  &.secondary-btn,
+  &.social-btn {
+    background: transparent;
+    border: 1px solid $greyG75 !important;
+    color: $greyG100 !important;
+
+    &:hover {
+      background: $greyG75 !important;
+      color: $greyG300 !important;
+    }
+  }
+
+  &.social-btn {
+    span {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  &.link-btn {
+    height: auto;
+    padding: 0;
+    width: max-content;
+    background: transparent;
+    text-decoration: underline;
+    @include radius(0);
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: $greyG75 !important;
+    cursor: not-allowed;
+    opacity: 0.5 !important;
+    color: inherit !important;
+    border-color: $greyG75 !important;
+
+    &:hover {
+      border-color: $greyG75 !important;
+      background-color: $greyG75 !important;
+      cursor: not-allowed;
+      opacity: 0.5 !important;
+      color: inherit !important;
+    }
+  }
+
+  &:not(:disabled),
+  &:not(.disabled) {
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+  }
+
+  .loader {
+    border: 4px solid $greyG50;
+    border-left-color: transparent;
+    width: 25px;
+    height: 25px;
+    animation: spin89345 1s linear infinite;
+    @include radius(50%);
+  }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: $greyG50;
+  transform: scale(0);
+  animation: ripple-animation 600ms linear;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes spin89345 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}

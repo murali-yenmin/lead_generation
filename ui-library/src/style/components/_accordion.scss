@@ -1,0 +1,32 @@
+.accordion {
+  width: 100%;
+  margin: 20px auto;
+
+  .accordion-header {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+    background: $greyG75;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    margin: 10px 0px 3px;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+  .accordion-content {
+    overflow: hidden;
+    height: 0;
+    padding: 0 10px;
+    transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  }
+  .accordion-content.open {
+    height: auto;
+    padding: 10px;
+  }
+}

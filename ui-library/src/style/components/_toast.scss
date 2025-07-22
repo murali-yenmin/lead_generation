@@ -1,0 +1,95 @@
+.toast-container {
+  max-width: 22rem;
+  width: 100%;
+  @include flex($align: center);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+  position: relative;
+
+  .icon {
+    font-size: 1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .content {
+    flex: 1;
+
+    .title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .message {
+      font-size: 0.875rem;
+    }
+  }
+
+  .close-btn {
+    margin-left: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 0.875rem;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    position: unset;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    animation: progressBar 5000ms linear forwards;
+  }
+
+  &.success {
+    background-color: $white;
+    color: $greenG200;
+
+    .toast-progress {
+      background: $greenG90;
+    }
+  }
+
+  &.error {
+    background-color: $white;
+    color: $primary;
+
+    .toast-progress {
+      background: $orangeO200;
+    }
+  }  
+
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}

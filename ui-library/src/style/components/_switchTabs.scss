@@ -1,0 +1,45 @@
+.switch-header {
+    @include flex($align: center, $justify: space-between);
+
+    .date-range-input {
+        input {
+            background: transparent;
+        }
+
+        .input-label {
+            background: $greyG50;
+        }
+
+    }
+}
+
+.switch-tabs {
+    @include flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    background: $white;
+    @include radius(16px);
+    overflow: hidden;
+
+    .button {
+        width: auto;
+        height: 48px;
+        @include text($size: $fs-base, $weight: 500, $color: $greyG100);
+        background: transparent;
+        padding: 18px;
+        @include flex($align: center, $justify: center);
+        @include radius(0);  
+        margin: 0;     
+        border:0; 
+
+        &.active {
+            font-weight: bold;
+            color: $primary; 
+            border-bottom: 3px solid $primary;
+        }
+        &:hover{
+            color: $white !important;
+            background: $orangeO100 !important;
+        }
+    }
+}

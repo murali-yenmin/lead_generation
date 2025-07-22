@@ -1,0 +1,317 @@
+.form-control {
+  position: relative;
+  margin-bottom: 25px;
+  width: 100%;
+
+  .field {
+    display: flex;
+    position: relative;
+
+    .country-code {
+      position: absolute;
+      padding: 0;
+      top: 24px;
+      color: $greyG300;
+    }
+
+    .input-with-country-code {
+      padding-left: 40px;
+    }
+
+    .input-with-country-code ~ label,
+    .expiry-input-wrapper ~ .input-focused {
+      top: 0px;
+      left: 12px;
+      font-size: $fs-light;
+      background: $white;
+      color: $primaryDark;
+    }
+
+    .expiry-input-wrapper {
+      &::after {
+        content: '';
+      }
+      .expiry-input {
+        &::placeholder {
+          color: transparent;
+        }
+      }
+    }
+
+    .required {
+      visibility: visible;
+    }
+
+    &.input-focused {
+      .expiry-input-wrapper {
+        &::after {
+          content: '/';
+        }
+        .expiry-input {
+          &::placeholder {
+            color: $greyG100;
+          }
+        }
+      }
+    }
+  }
+
+  input {
+    @include webkitWidth;
+    height: 30px;
+    padding: 9px 16px;
+    font-size: $fs-base;
+    color: $greyG300;
+    background: transparent;
+    border: 1px solid $greyG100;
+    @include radius(10px);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &.field-error {
+      border: 1px solid $redR300;
+    }
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:focus {
+      border: 1px solid $primaryDark;
+    }
+
+    #password {
+      padding-right: 50px;
+    }
+
+    #confirm_password {
+      padding-right: 50px;
+    }
+  }
+
+  label {
+    position: absolute;
+    top: 25px;
+    left: 15px;
+    transform: translateY(-50%);
+    color: $greyG100;
+    font-size: 16px;
+    padding: 0 5px;
+    transition: 0.3s ease-in-out;
+    pointer-events: none;
+
+    span {
+      visibility: hidden;
+      padding-left: 5px;
+      color: $primaryDark;
+    }
+  }
+
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label {
+    top: 0px;
+    left: 12px;
+    font-size: $fs-light;
+    background: $white;
+    color: $primaryDark;
+
+    span {
+      visibility: visible;
+    }
+  }
+
+  .eye-icon {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    width: 23px;
+    height: 21px;
+    padding: 0;
+    @include flex($align: center, $justify: center);
+  }
+
+  .input-icon {
+    background-color: $greyG50;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 55px;
+    height: 47px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .icon-spacing {
+    padding-right: 70px;
+  }
+}
+
+.error-container {
+  @include flex($align: flex-start);
+  gap: 5px;
+  padding-top: 6px;
+
+  .error-message {
+    color: $redR300;
+    font-size: $fs-light;
+    line-height: $lh-light;
+  }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.otp-input-container {
+  gap: 8px;
+  width: fit-content;
+
+  .otp-input {
+    border-radius: 10px;
+    width: 100% !important;
+    height: 30px;
+    border: 1.5px solid $greyG75;
+    font-size: 20px;
+    padding: 12px;
+    display: inline-block;
+
+    &:nth-child(3) {
+      margin-right: 21px;
+    }
+  }
+}
+
+.radioBtn {
+  .radioField {
+    @include flex;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
+  .checked-field {
+    display: block;
+    padding: 4px;
+    border: 4px solid $white;
+    outline: 3px solid $primary;
+    border-radius: 50%;
+    margin-right: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .customRadio {
+    position: relative;
+
+    input {
+      margin: 0;
+      position: absolute;
+      top: 0;
+      visibility: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    &.checked {
+      .checked-field {
+        background: $primary;
+      }
+
+      .checked-style {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.card-logo {
+  position: absolute;
+  right: 10px;
+  top: 16px;
+}
+
+/** Expiry input style */
+.expiry-input-wrapper {
+  @include flex($align: center);
+  @include webkitWidth;
+  height: 49px;
+  font-size: $fs-base;
+  color: $greyG300;
+  border: 1px solid $greyG100;
+  @include radius(10px);
+
+  &::after {
+    content: '/';
+    position: absolute;
+    left: 50%;
+  }
+
+  .expiry-input {
+    padding: 0;
+    border: 0;
+    width: 100%;
+    text-align: center;
+    padding: 9px 16px;
+
+    &:focus {
+      border: 0;
+    }
+
+    &:focus-visible {
+      outline: 0;
+    }
+
+    &::placeholder {
+      color: $greyG100;
+    }
+  }
+}
+
+// google address input
+.google-input-wrapper {
+  position: relative;
+
+  .address-list {
+    position: absolute;
+    z-index: 10;
+    background: $white;
+    border: 1px solid $greyG75;
+    @include radius(5px);
+    @include flex($direction: column);
+    width: 100%;
+    top: 55px;
+    overflow: hidden;
+
+    button {
+      background: transparent;
+      width: 100%;
+      padding: 15px 20px;
+      border: 0;
+      text-align: start;
+
+      &:hover {
+        background: $blueB50;
+        color: $blueB300;
+        cursor: pointer;
+      }
+    }
+  }
+}

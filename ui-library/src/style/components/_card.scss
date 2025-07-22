@@ -1,0 +1,29 @@
+.card {
+  @include webkitWidth;
+  @include radius(16px);
+  background: $white;
+
+  .card-header {
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom: 1px solid $greyG75;
+  }
+
+  .card-body {
+    padding: 16px;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .card-footer {
+    padding: 12px 16px;
+    background: $greyG75;
+    border-top: 1px solid $greyG75;
+    text-align: right;
+  }
+}

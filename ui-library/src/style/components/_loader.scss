@@ -1,0 +1,35 @@
+// Page loader
+.page-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.247);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: none;
+
+  .page-loader {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-left: 5px solid black;
+    animation: spin 1s linear infinite;
+  }
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

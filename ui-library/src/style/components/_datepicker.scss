@@ -1,0 +1,152 @@
+.rmdp-container {
+  @include webkitWidth;
+  .date-input {
+    height: 48px;
+    padding: 0 75px 0 15px;
+    @include radius(10px);
+    @include webkitWidth;
+    margin: 0;
+    border: 1.5px solid $greyG100;
+    font-size: $fs-base;
+
+    &:focus {
+      box-shadow: none;
+      border: 1.5px solid $primaryDark;
+    }
+  }
+
+  .rmdp-shadow{
+    @include radius(13px);
+    box-shadow: 2px 4px 24px 0px #0000001A;
+
+  }
+
+  .rmdp-ep-arrow {
+    border: unset;
+    width: 20px !important;
+  }
+
+  .rmdp-wrapper {
+    .rmdp-calendar {
+      .rmdp-header {
+        .rmdp-arrow-container {
+          padding: 0;
+          &.disabled {
+            opacity: 0.2;
+          }
+
+          &:hover {
+            background-color: transparent;
+            box-shadow: none;
+          }
+
+          .rmdp-arrow {
+            border-color: $primary;
+            height: 3px;
+            width: 3px;
+          }
+        }
+      }
+
+      .rmdp-day-picker {
+        .rmdp-week {
+          .rmdp-week-day {
+            color: $primary;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .rmdp-day-picker,
+      .rmdp-year-picker,
+      .rmdp-month-picker {
+        .rmdp-ym,
+        .rmdp-week {
+          .rmdp-day {
+            &.rmdp-selected {
+              span:not(.highlight) {
+                background: $blueB300;
+                box-shadow: none;
+                color: $white;
+              }
+            }
+
+            &.rmdp-today {
+              span {
+                color: $white;
+                background: transparent;
+                color: $blueB300;
+                font-weight: 600;
+              }
+            }
+
+            &:not(.rmdp-disabled, .rmdp-day-hidden) {
+              span {
+                &:hover {
+                  background: $blueB100;
+                  color: $white;
+                }
+              }
+            }
+            &.rmdp-range{
+              box-shadow: none;
+              background: $blueB025;
+              span{ 
+                color: $black;
+              }
+            } 
+            
+            &.start,
+            &.end{
+              span{
+                background: $blueB200;
+                color: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.date-picker-wrapper {
+  position: relative;
+
+  .input-label {
+    position: absolute;
+    top: 18px;
+    left: 15px;
+    padding: 0 5px;
+    transition: 0.3s ease-in-out;
+    cursor: text;
+
+    &.input-focused {
+      top: -8px;
+      left: 12px;
+      font-size: 14px;
+      background-color: $white;
+      color: $primary;
+    }
+  }
+
+  label {
+    color: $greyG100;
+  }
+
+  .calendar-icon {
+    width: 55px;
+    height: 47px;
+    background-color: $blueB50;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    @include flex($align: center, $justify: center);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+}

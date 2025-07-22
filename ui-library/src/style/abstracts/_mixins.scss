@@ -1,0 +1,96 @@
+// Text Styling Mixin
+@mixin text($size: 16px, $weight: normal, $color: #333, $align: left) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  text-align: $align;
+  font-family: $font-primary;
+}
+
+// Flexbox Mixin
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+// Grid Mixin
+@mixin grid($columns: 2, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+// Border Radius Mixin
+@mixin radius($radius: 5px) {
+  border-radius: $radius;
+}
+
+// Box Shadow Mixin
+@mixin shadow($x: 0px, $y: 4px, $blur: 10px, $color: rgba(0, 0, 0, 0.1)) {
+  box-shadow: $x $y $blur $color;
+}
+
+@mixin linearGradient(
+  $startColor,
+  $endColor,
+  $angle: 180deg,
+  $startPosition: 0%,
+  $endPosition: 0%
+) {
+  background: linear-gradient($angle, $startColor $startPosition, $endColor $endPosition);
+}
+@mixin common-gradient($startColor, $endColor, $angle: 0deg) {
+  background: linear-gradient($angle, $startColor 0%, $endColor 100%);
+}
+
+//WebkitWith
+@mixin webkitWidth {
+  width: -moz-available; // Firefox
+  width: -webkit-fill-available; // Chrome, Safari
+  width: fill-available; // Future standard
+}
+
+// Responsive Mixin
+@mixin respond($breakpoint) {
+  @if $breakpoint == xs {
+    @media screen and (max-width: 480px) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media screen and (max-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media screen and (max-width: 992px) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media screen and (max-width: 1280px) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media screen and (max-width: 1440px) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+//Based on Device
+@mixin responsiveDevice($max-width, $max-height) {
+  @media screen and (max-width: $max-width) and (max-height: $max-height) {
+    @content;
+  }
+}
+
+@mixin min-width($breakpoint) {
+  @media (min-width: #{$breakpoint}) {
+    @content;
+  }
+}

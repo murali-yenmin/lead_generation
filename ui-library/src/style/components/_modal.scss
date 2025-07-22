@@ -1,0 +1,238 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(148, 147, 147, 0.5);
+  @include flex($justify: center, $align: center);
+  z-index: 1000;
+
+  .modal {
+    border-radius: 19px;
+    padding: 20px;
+    background-color: $textWhite;
+    width: 450px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    max-height: 80%;
+    overflow: hidden;
+    position: relative;
+
+    &-sm {
+      width: 300px;
+    }
+
+    &-md {
+      width: 500px;
+    }
+
+    &-lg {
+      width: 700px;
+    }
+
+    &-xl {
+      width: 900px;
+    }
+
+    .close-icon {
+      span {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        color: $greyG100;
+        cursor: pointer;
+        font-size: $fs-lg;
+      }
+    }
+
+    .modal-header {
+      @include flex($justify: space-between, $align: center);
+      width: 100%;
+      font-size: 30px;
+
+      h1 {
+        font-size: 30px;
+        margin: 0;
+      }
+    }
+
+    .modal-content {
+      margin-bottom: 20px;
+      overflow-y: auto;
+      height: -webkit-fill-available;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: end;
+      column-gap: 10px;
+
+      .btn {
+        padding: 10px 20px;
+        border: 0;
+        cursor: pointer;
+
+        &.primary-btn {
+          background-color: $greenG100;
+        }
+
+        &.secondary-btn {
+          background-color: $redR300;
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  &-sm {
+    width: 300px;
+  }
+
+  &-md {
+    width: 500px;
+  }
+
+  &-lg {
+    width: 700px;
+  }
+
+  &-xl {
+    width: 900px;
+  }
+}
+
+.confirmation-modal {
+  .modal {
+    padding: 0 !important;
+    @include radius(19px);
+
+    .modal-header {
+      border-bottom: 1px solid $greyG50;
+    }
+
+    .modal-content,
+    .modal-footer {
+      padding: 10px 20px;
+    }
+
+    .modal-footer {
+      padding-bottom: 20px;
+    }
+
+    .modal-header {
+      width: auto;
+      @include flex($align: center, $justify: center);
+      padding: 15px 20px;
+      h1 {
+        @include text($size: $fs-base, $color: $brownB300, $weight: $fw-bold);
+        line-height: $lh-base;
+      }
+    }
+
+    .modal-content {
+      padding-top: 20px;
+      margin-bottom: 10px;
+
+      p {
+        @include text($size: $fs-light, $color: $greyG200, $weight: $fw-regular);
+        line-height: $lh-light;
+        width: 100%;
+        text-align: center;
+        display: block;
+      }
+    }
+
+    .modal-footer {
+      text-align: right;
+      justify-content: center;
+
+      button {
+        @include text($size: $fs-light, $weight: $fw-medium);
+        line-height: $lh-light;
+        width: auto;
+        height: auto;
+        padding: 10px 20px;
+        min-width: 76px;
+
+        &.primary-btn {
+          color: $white;
+        }
+        &.secondary-btn {
+          color: $greyG100;
+        }
+        .loader {
+          width: 8px;
+          height: 8px;
+          border-width: 3px;
+        }
+      }
+    }
+  }
+}
+
+// idle-model
+.idle-model {
+  .modal-overlay {
+    z-index: 1001;
+  }
+
+  .idle-content {
+    padding-top: 0;
+  }
+
+  .idle-btn {
+    display: flex;
+    gap: 15px;
+    .social-btn {
+      span {
+        height: auto;
+        width: auto;
+      }
+    }
+  }
+}
+
+// interceptor modal
+.interceptor-modal {
+  text-align: center;
+
+  .modal {
+    padding: 30px;
+
+    .modal-content {
+      overflow-y: hidden;
+
+      .image-container {
+        position: relative;
+
+        svg {
+          width: 80%;
+          height: auto;
+        }
+
+        .close {
+          position: absolute;
+          right: 5px;
+          top: -5px;
+          font-size: 30px;
+          color: $greyG100;
+          cursor: pointer;
+        }
+      }
+
+      .text {
+        font-size: $fs-lg;
+        margin-top: 30px;
+      }
+
+      .social-btn {
+        margin-top: 30px;
+
+        .icon {
+          height: fit-content;
+        }
+      }
+    }
+  }
+}
