@@ -12,7 +12,7 @@ const Dashboard = () => {
       <div className="social-medias-container">
         {socialMediaDatas.map((item) => (
           <CardLayout>
-            <Link to={item?.title.toLowerCase()} className="card-link">
+            <Link to={item?.path.toLowerCase()} className="card-link">
               <div className="card-box">
                 <div className="icon">
                   <img src={item?.img} alt={item?.title} />

@@ -12,7 +12,9 @@ import MainLayout from './components/layout';
 import { BreadcrumbTitleProvider } from './components/BreadcrumbTitleContext';
 import ResponsiveAlert from './components/ResponsiveAlert';
 import Dashboard from './screen/dashboard/Dashboard';
-import LinkedIn from './screen/dashboard/LinkedIn';
+import LinkedIn from './components/LinkedIn';
+import Emailsender from './components/Emailsender';
+import GoogleAds from './components/GoogleAds';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
@@ -40,8 +42,8 @@ const App = () => {
                       <Route path="dashboard" element={<Outlet />}>
                         <Route index element={<Dashboard />} />
                         <Route path="linkedin" element={<LinkedIn />} />
-                        <Route path="emailsender" element={<LinkedIn />} />
-                        <Route path="googleads" element={<LinkedIn />} />
+                        <Route path="emailsender" element={<Emailsender />} />
+                        <Route path="googleads" element={<GoogleAds />} />
                       </Route>
                     </Routes>
                   </MainLayout>

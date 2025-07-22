@@ -1,50 +1,50 @@
+.cardLayout {
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: $white;
+  @include radius($radius: 8px);
+}
 .social-medias-container {
+  @include flex($direction: row, $justify: flex-start, $align: stretch, $wrap: wrap);
+  gap: 30px;
 
-    @include flex($direction: row, $justify: flex-start, $align: stretch, $wrap: wrap);
-    gap: 30px;
+  .cardLayout {
+    max-width: 260px;
+    width: 100%;
+    padding: 16px;
 
-    .cardLayout {
-        max-width: 260px;
-        width: 100%;
-        padding: 16px;
-        background-color: $white;
-        box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-        @include radius($radius: 8px);
-        cursor: pointer;
+    cursor: pointer;
 
-        h1{
-            // @include text($size:,$)
-            @include text($size: $fs-md, $weight: $fw-medium, $color: $black);
-        }
-        .card-link{
-            text-decoration: none;
-        }
-
-        .card-box {
-            @include flex($direction: row, $justify: center, $align: center, $wrap: wrap);
-            gap: 30px;
-
-            .icon {
-                width: 44px;
-                height: 44px;
-                @include radius($radius: 50%);
-
-                img {
-                    width: 100%;
-                    height: 100%;
-                }
-            }
-        }
-
-        &:last-child{
-            .card-box{
-                img{
-                    width: 35px;
-                    height: 35px;
-                }
-            }
-        }
-
+    h1 {
+      // @include text($size:,$)
+      @include text($size: $fs-md, $weight: $fw-medium, $color: $black);
+    }
+    .card-link {
+      text-decoration: none;
     }
 
+    .card-box {
+      @include flex($direction: row, $justify: center, $align: center, $wrap: wrap);
+      gap: 30px;
+
+      .icon {
+        width: 44px;
+        height: 44px;
+        @include radius($radius: 50%);
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    &:last-child {
+      .card-box {
+        img {
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+  }
 }
