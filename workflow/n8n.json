@@ -1,0 +1,1728 @@
+{
+  "name": "AutoPost",
+  "nodes": [
+    {
+      "parameters": {
+        "person": "JLSLbLJ4eU",
+        "text": "={{ $json.postBody }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        560
+      ],
+      "id": "6bb30abc-e86b-42ce-b483-fec137a8b9ed",
+      "name": "Create a post",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "SeHoW3OFR1c9NDTZ",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "socialMedia",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        144,
+        1792
+      ],
+      "id": "172b3d3a-73b3-408c-9213-155d49bb8b3e",
+      "name": "LinkedIn Request",
+      "webhookId": "4d5b6393-9fa4-4010-bbcb-ad57033b1e9b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ad1d3fd9-e692-4979-8268-3134038fe26c",
+              "leftValue": "={{ $json.imageUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        416
+      ],
+      "id": "b2807ac6-6cba-43ff-ad58-22daed83890e",
+      "name": "Check image post"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\nfor (const item of $input.all()) {\n  const post = item.json;\n\n  const content = post.postBody || '';\n  const imageUrl = post.imageUrl;\n\n  // Base structure\n  const result = {\n    json: {\n      content\n    }\n  };\n\n  // If imageUrl is a base64 data URI, convert to binary\n  if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image/')) {\n    const matches = imageUrl.match(/^data:(image\\/[a-zA-Z0-9.+-]+);base64,(.+)$/);\n    \n    if (matches && matches.length === 3) {\n      const mimeType = matches[1];\n      const base64Data = matches[2];\n      const extension = mimeType.split('/')[1]; // e.g., png, jpeg\n      const buffer = Buffer.from(base64Data, 'base64');\n\n      result.binary = {\n        data: {\n          data: buffer.toString('base64'),\n          mimeType,\n          fileName: `image.${extension}`\n        }\n      };\n    } else {\n      throw new Error('❌ Invalid base64 image format: ' + imageUrl);\n    }\n  }\n\n  results.push(result);\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        272
+      ],
+      "id": "3cb99278-30ff-4bce-87b0-8f4b9f7184c6",
+      "name": "Data format"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.urn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1808,
+        560
+      ],
+      "id": "cb942a83-d4be-44f5-96f8-a1f659672407",
+      "name": "Text Post Respons"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2080,
+        464
+      ],
+      "id": "45f97820-f3b8-4a45-978f-a966ac9f65be",
+      "name": "Respond to Sucess"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2080,
+        672
+      ],
+      "id": "88a19a35-242f-4bfc-8834-7d3d436817b5",
+      "name": "Respond to Failed"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.urn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2096,
+        272
+      ],
+      "id": "0cec06a7-16bf-4671-bd4f-f2cf30f5910c",
+      "name": "Image post respons"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2400,
+        192
+      ],
+      "id": "fe991458-67a5-4f68-b7cb-0bbb29b9cddd",
+      "name": "Respond to Sucess image post"
+    },
+    {
+      "parameters": {
+        "content": "## LinkedIn Post\n ",
+        "height": 704,
+        "width": 1552,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1136,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "1b1cf3bc-d99b-4cf4-8237-d6a09c0f423b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "person": "JLSLbLJ4eU",
+        "text": "={{ $json.content }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        272
+      ],
+      "id": "4cf1989e-7243-4be7-8fde-8fef61673fd8",
+      "name": "Create a image post",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "SeHoW3OFR1c9NDTZ",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2416,
+        432
+      ],
+      "id": "63096500-7446-47ec-8448-449937279ec1",
+      "name": "Respond to Failed image post"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "linkedin",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "90f44017-b339-471d-9e09-350bfecc197f"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2f912cd5-1097-42cc-91ab-7731c130cd04",
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "facebook",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9e3a8c42-b25d-49b8-bb6f-f97cdb8428dd",
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "instagram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "932d03c7-53be-4277-8b53-3cc829fa5005",
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "twitter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        704,
+        1760
+      ],
+      "id": "19db767e-eb24-4e84-80d7-8600a1854a97",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the input item\nconst input = $input.first().json;\n\n// Step 1: Get body safely\nconst rawBody = input.body;\n\nif (!rawBody) {\n  throw new Error('❌ Missing `body` field in incoming data.');\n}\n\nlet parsed;\n\n// Step 2: If already an object, use it\nif (typeof rawBody === 'object') {\n  parsed = rawBody;\n}\n// Step 3: If it's a string, try parsing it\nelse if (typeof rawBody === 'string') {\n  try {\n    parsed = JSON.parse(rawBody);\n  } catch (err) {\n    throw new Error('❌ Failed to parse string `body` as JSON: ' + err.message + '\\nRaw: ' + rawBody);\n  }\n} else {\n  throw new Error('❌ `body` must be a string or object, but got: ' + typeof rawBody);\n}\n\n// Step 4: Return parsed JSON\nreturn [\n  {\n    json: parsed\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        1792
+      ],
+      "id": "69838fca-aadc-45f5-a616-9435785f37f4",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "person": "JLSLbLJ4eU",
+        "text": "={{ $json.postBody }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        1536
+      ],
+      "id": "494a193e-c7fc-4806-a753-b7e855e9abd2",
+      "name": "Create a post1",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "SeHoW3OFR1c9NDTZ",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ad1d3fd9-e692-4979-8268-3134038fe26c",
+              "leftValue": "={{ $json.imageUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        1312
+      ],
+      "id": "469ece28-9588-4df4-831f-69747b03e39d",
+      "name": "Check image post1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.urn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        1536
+      ],
+      "id": "6524e390-4777-4a27-9bdc-0fae9a366369",
+      "name": "Text Post Respons1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2048,
+        1424
+      ],
+      "id": "30f10cda-5e0f-4059-b002-dd8840cf4ba5",
+      "name": "Respond to Sucess1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2048,
+        1600
+      ],
+      "id": "9a3cd616-9b7b-4f26-b56e-11f034c6dd94",
+      "name": "Respond to Failed1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.post_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2432,
+        1280
+      ],
+      "id": "ca032b2f-4979-407e-aa72-4d5ef8347ffa",
+      "name": "Image post respons1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2672,
+        1152
+      ],
+      "id": "9135f9ae-3643-438b-85a6-fcf9f00568be",
+      "name": "Respond to Sucess image post1"
+    },
+    {
+      "parameters": {
+        "content": "## Facebook Post\n ",
+        "height": 768,
+        "width": 1824,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1136,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "27da8d71-19b3-44be-87a5-e23f092ae7fa",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2672,
+        1376
+      ],
+      "id": "bfb9cb3f-5f04-4cbc-a33b-7dbd31e509b8",
+      "name": "Respond to Failed image post1"
+    },
+    {
+      "parameters": {
+        "person": "JLSLbLJ4eU",
+        "text": "={{ $json.postBody }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        2400
+      ],
+      "id": "47b42145-1a68-479d-a545-9309ca9c18ba",
+      "name": "Create a post2",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "SeHoW3OFR1c9NDTZ",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ad1d3fd9-e692-4979-8268-3134038fe26c",
+              "leftValue": "={{ $json.imageUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        2208
+      ],
+      "id": "073a9dec-50f1-4785-8e16-12c5a7076c46",
+      "name": "Check image post2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.urn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1840,
+        2400
+      ],
+      "id": "98bb790e-2692-4936-9163-e4162c81f713",
+      "name": "Text Post Respons2"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2128,
+        2304
+      ],
+      "id": "b3d65017-67c7-4ca1-b7e3-c8a0a712ec37",
+      "name": "Respond to Sucess2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2128,
+        2496
+      ],
+      "id": "4f3d6b83-9a8f-4b65-bffa-964dd4338aca",
+      "name": "Respond to Failed2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2848,
+        2176
+      ],
+      "id": "ee2be076-3e0c-4a92-b4cc-650e3689e8b7",
+      "name": "Image post respons2"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3136,
+        2080
+      ],
+      "id": "90efcd17-da9f-4937-944f-964fdca7d755",
+      "name": "Respond to Sucess image post2"
+    },
+    {
+      "parameters": {
+        "content": "## Instagram Post\n ",
+        "height": 704,
+        "width": 2208,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1152,
+        1968
+      ],
+      "typeVersion": 1,
+      "id": "90d88f7b-a387-4779-a45f-5dddfd53e04f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3136,
+        2256
+      ],
+      "id": "cc1d97b0-9c21-46f0-9620-bc4ac461bd5e",
+      "name": "Respond to Failed image post2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ad1d3fd9-e692-4979-8268-3134038fe26c",
+              "leftValue": "={{ $json.imageUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        3136
+      ],
+      "id": "819f64d5-defe-4030-8f3a-b2266852b271",
+      "name": "Check image post3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\nfor (const item of $input.all()) {\n  const post = item.json;\n\n  const content = post.postBody || '';\n  const imageUrl = post.imageUrl;\n\n  // Base structure\n  const result = {\n    json: {\n      content\n    }\n  };\n\n  // If imageUrl is a base64 data URI, convert to binary\n  if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image/')) {\n    const matches = imageUrl.match(/^data:(image\\/[a-zA-Z0-9.+-]+);base64,(.+)$/);\n    \n    if (matches && matches.length === 3) {\n      const mimeType = matches[1];\n      const base64Data = matches[2];\n      const extension = mimeType.split('/')[1]; // e.g., png, jpeg\n      const buffer = Buffer.from(base64Data, 'base64');\n\n      result.binary = {\n        data: {\n          data: buffer.toString('base64'),\n          mimeType,\n          fileName: `image.${extension}`\n        }\n      };\n    } else {\n      throw new Error('❌ Invalid base64 image format: ' + imageUrl);\n    }\n  }\n\n  results.push(result);\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        2976
+      ],
+      "id": "e1f97219-e5e1-4cd6-83be-607cc1eccd06",
+      "name": "Data format3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        3296
+      ],
+      "id": "ea2233e3-c3aa-43ee-948c-f7e79d133fd5",
+      "name": "Text Post Respons3"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2304,
+        3200
+      ],
+      "id": "9bcc6c65-42f8-4eaa-9a4a-f1fa8aaada71",
+      "name": "Respond to Sucess3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2304,
+        3408
+      ],
+      "id": "3b152e05-76e9-487a-9f5b-ee872997fcfd",
+      "name": "Respond to Failed3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "189c136e-17c3-44f5-8cc2-7ffcd271bc6c",
+              "leftValue": "={{ $json.urn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        2976
+      ],
+      "id": "fa5cb214-e8b7-4b9c-a66d-7e4ddd2f5cc9",
+      "name": "Image post respons3"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2320,
+        2880
+      ],
+      "id": "c2329361-f1f2-4edd-b212-914434f813d4",
+      "name": "Respond to Sucess image post3"
+    },
+    {
+      "parameters": {
+        "content": "## Twitter Post\n ",
+        "height": 736,
+        "width": 1408,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1152,
+        2848
+      ],
+      "typeVersion": 1,
+      "id": "fe104b4c-607b-45a3-b44f-c110dac777f6",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2304,
+        3056
+      ],
+      "id": "04ce1ced-11af-4c5c-89a6-ea01bb429e6d",
+      "name": "Respond to Failed image post3"
+    },
+    {
+      "parameters": {
+        "text": "testing",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        2976
+      ],
+      "id": "16a3c96c-ef7a-4a58-b629-879140a83fb7",
+      "name": "Create Tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "BQguBKH5ttZSh8AA",
+          "name": "Silviya X account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.postBody }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        3296
+      ],
+      "id": "0c294bad-6890-4303-93e5-b13b020eaefa",
+      "name": "Create Tweet1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "95ElWrFMNxgLW0vf",
+          "name": "Murali account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v22.0",
+        "node": "17841476026619304",
+        "edge": "media",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "caption",
+                "value": "={{ $json.postBody }}"
+              },
+              {
+                "name": "image_url",
+                "value": "={{ $json.secure_url }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        2176
+      ],
+      "id": "55c41b11-2fb5-41ed-ad7a-8dd7250a13a0",
+      "name": "Facebook Graph API",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "N0ZvPLxni2IPDeZI",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v22.0",
+        "node": "17841476026619304",
+        "edge": "media_publish",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "creation_id",
+                "value": "={{ $json.id }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        2624,
+        2176
+      ],
+      "id": "7880a7a0-424a-4977-b72b-f7341fff4d81",
+      "name": "Facebook Graph API1",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "N0ZvPLxni2IPDeZI",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.cloudinary.com/v1_1/dwlj9lgzu/image/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ $json.imageUrl }}"
+            },
+            {
+              "name": "upload_preset",
+              "value": "n8n_upload"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        2016
+      ],
+      "id": "870784ea-610d-4cb9-bad9-09c95c921afb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1888,
+        2176
+      ],
+      "id": "be95ee0e-1c2d-4d61-8dea-7789366a5011",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Example input items: assume first item contains image data, second item contains post body\nconst imageArray = items[0].json;\nconst postArray = items[1].json;\n\n// If your data is already arrays inside those items (as in your example), make sure to extract them:\nconst images = Array.isArray(imageArray) ? imageArray : [imageArray];\nconst posts = Array.isArray(postArray) ? postArray : [postArray];\n\n// Merge each image with the corresponding postBody\nconst merged = images.map((img, index) => {\n  return {\n    ...img,\n    ...(posts[index] || {})  // Add postBody from matching index or fallback to empty\n  };\n});\n\n// Return merged results to next node\nreturn merged.map(item => ({ json: item }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        2176
+      ],
+      "id": "bc0d11ae-980c-4b8d-9c59-f6544a65b3d4",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.cloudinary.com/v1_1/dwlj9lgzu/image/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ $json.imageUrl }}"
+            },
+            {
+              "name": "upload_preset",
+              "value": "n8n_upload"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        1152
+      ],
+      "id": "f764dc36-3cf0-4bc6-9e77-63ffeac573ba",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1856,
+        1280
+      ],
+      "id": "9d52a5c6-48d8-46ad-a471-ef248254b8eb",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Example input items: assume first item contains image data, second item contains post body\nconst imageArray = items[0].json;\nconst postArray = items[1].json;\n\n// If your data is already arrays inside those items (as in your example), make sure to extract them:\nconst images = Array.isArray(imageArray) ? imageArray : [imageArray];\nconst posts = Array.isArray(postArray) ? postArray : [postArray];\n\n// Merge each image with the corresponding postBody\nconst merged = images.map((img, index) => {\n  return {\n    ...img,\n    ...(posts[index] || {})  // Add postBody from matching index or fallback to empty\n  };\n});\n\n// Return merged results to next node\nreturn merged.map(item => ({ json: item }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        1280
+      ],
+      "id": "b8192e09-3cce-4564-9952-879137a51b06",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v22.0",
+        "node": "me",
+        "edge": "photos",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "message",
+                "value": "={{ $json.postBody }}"
+              },
+              {
+                "name": "url",
+                "value": "={{ $json.secure_url }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        2240,
+        1280
+      ],
+      "id": "6018856d-de40-4c17-b773-816fbfc28464",
+      "name": "Facebook Graph API2",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "yERqFpIujdBH7yKh",
+          "name": "Facebook  Login"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const body = item.json.postBody || \"\";\n  \n  // Split the text from hashtags\n  const hashtagRegex = /#[\\w]+/g;\n  const allHashtags = body.match(hashtagRegex) || [];\n\n  // Keep only the first two hashtags\n  const firstTwo = allHashtags.slice(0, 2).join(\" \");\n\n  // Remove all hashtags from original body\n  const bodyWithoutHashtags = body.replace(hashtagRegex, \"\").trim();\n\n  // Append only the first two hashtags back\n  const newPostBody = `${bodyWithoutHashtags}\\n\\n${firstTwo}`.trim();\n\n  return {\n    json: {\n      ...item.json,\n      postBody: newPostBody\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        3296
+      ],
+      "id": "2d225650-b39a-40b0-af2a-86a719763d4c",
+      "name": "Code3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create a post": {
+      "main": [
+        [
+          {
+            "node": "Text Post Respons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image post": {
+      "main": [
+        [
+          {
+            "node": "Data format",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data format": {
+      "main": [
+        [
+          {
+            "node": "Create a image post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Post Respons": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image post respons": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess image post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed image post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a image post": {
+      "main": [
+        [
+          {
+            "node": "Image post respons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Check image post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check image post1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check image post2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check image post3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a post1": {
+      "main": [
+        [
+          {
+            "node": "Text Post Respons1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image post1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Create a post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Post Respons1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image post respons1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess image post1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed image post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a post2": {
+      "main": [
+        [
+          {
+            "node": "Text Post Respons2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image post2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Create a post2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Post Respons2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image post respons2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess image post2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed image post2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image post3": {
+      "main": [
+        [
+          {
+            "node": "Data format3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data format3": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Post Respons3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image post respons3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Sucess image post3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Failed image post3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Tweet": {
+      "main": [
+        [
+          {
+            "node": "Image post respons3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Tweet1": {
+      "main": [
+        [
+          {
+            "node": "Text Post Respons3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Graph API": {
+      "main": [
+        [
+          {
+            "node": "Facebook Graph API1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Graph API1": {
+      "main": [
+        [
+          {
+            "node": "Image post respons2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Facebook Graph API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Facebook Graph API2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Graph API2": {
+      "main": [
+        [
+          {
+            "node": "Image post respons1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f8b3c70a-717a-441a-9db8-665cfd2e6f0f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2f1521564a8b7ca62c2ebf435fded87516106b8a5a6c5a6bcfc70024f355223b"
+  },
+  "id": "vtT9NxSmRNMEuQs9",
+  "tags": []
+}
