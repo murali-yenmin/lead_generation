@@ -158,7 +158,7 @@ export function SocialMediaKeywordGenerator() {
                   AI Keyword Generator
                 </CardTitle>
                 <CardDescription>
-                  Generate relevant keywords and hashtags for LinkedIn, Instagram, Facebook, and Twitter based on your audience or content.
+                  Generate relevant keywords and hashtags for LinkedIn, Instagram and  Facebook based on your audience or content.
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0 space-y-6">
@@ -210,7 +210,7 @@ export function SocialMediaKeywordGenerator() {
                     <TabsTrigger value="linkedin">LinkedIn</TabsTrigger>
                     <TabsTrigger value="instagram">Instagram</TabsTrigger>
                     <TabsTrigger value="facebook">Facebook</TabsTrigger>
-                    <TabsTrigger value="twitter">Twitter</TabsTrigger>
+                    {/* <TabsTrigger value="twitter">Twitter</TabsTrigger> */}
                 </TabsList>
                 {keywords && !isLoading && (
                     <Button

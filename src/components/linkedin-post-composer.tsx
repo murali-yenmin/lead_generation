@@ -100,11 +100,11 @@ const postComposerSchema = z.object({
 });
 
 type PostComposerValues = z.infer<typeof postComposerSchema>;
-type Platform = "all" | "linkedin" | "facebook" | "instagram" | "twitter";
+type Platform = "all" | "linkedin" | "instagram" | "facebook" | "twitter";
 const platformOrder: Exclude<Platform, "all" | "twitter">[] = [
   "linkedin",
-  "facebook",
   "instagram",
+  "facebook",
 ];
 type Vibe = "professional" | "casual" | "witty" | "inspiring";
 
@@ -276,8 +276,7 @@ function ComposerFields({
                 </FormControl>
                 <FormDescription>
                   Add relevant keywords or hashtags for your post.
-                </FormDescription>
-                <FormMessage />
+                </FormDescription> 
               </FormItem>
             )}
           />
@@ -327,7 +326,7 @@ function ComposerFields({
                     }
                   />
                 </FormControl>
-                <FormMessage />
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -412,7 +411,7 @@ export function SocialMediaPostComposer() {
 
     const platformsToUpdate: Platform[] =
       activePlatform === "all"
-        ? ["all", "linkedin", "facebook", "instagram", "twitter"]
+        ? ["all", "linkedin", "instagram", "facebook", "twitter"]
         : [activePlatform];
 
     platformsToUpdate.forEach((p) => {
@@ -430,25 +429,18 @@ export function SocialMediaPostComposer() {
       const result = await generateLinkedInPost({
         topic,
         vibe,
-        postType: "image_post", // Always generate an image for versatility
+        postType: "article", // Always generate an image for versatility
       });
-
-      const newImage = {
-        name: `ai-generated-image-${Date.now()}.png`,
-        url: result.imageUrl,
-      };
 
       const platformsToUpdate: Platform[] =
         activePlatform === "all"
-          ? ["all", "linkedin", "facebook", "instagram", "twitter"]
+          ? ["all", "linkedin", "instagram", "facebook", "twitter"]
           : [activePlatform];
 
       platformsToUpdate.forEach((p) => {
         const form = platformForms[p];
         form.setValue("postContent", result.post, { shouldValidate: true });
         form.setValue("keywords", result.keywords, { shouldValidate: true });
-        form.setValue("images", [newImage], { shouldValidate: true });
-        setIsAiImage((prev) => ({ ...prev, [p]: true }));
         setImageHistories((prev) => ({ ...prev, [p]: [] }));
       });
 
@@ -507,7 +499,7 @@ export function SocialMediaPostComposer() {
 
       const platformsToUpdate: Platform[] =
         activePlatform === "all"
-          ? ["all", "linkedin", "facebook", "instagram", "twitter"]
+          ? ["all", "linkedin", "instagram", "facebook", "twitter"]
           : [activePlatform];
 
       platformsToUpdate.forEach((p) => {
@@ -560,7 +552,7 @@ export function SocialMediaPostComposer() {
 
     const platformsToUpdate: Platform[] =
       activePlatform === "all"
-        ? ["all", "linkedin", "facebook", "instagram", "twitter"]
+        ? ["all", "linkedin", "instagram", "facebook", "twitter"]
         : [activePlatform];
 
     platformsToUpdate.forEach((p) => {
@@ -803,13 +795,13 @@ export function SocialMediaPostComposer() {
                 <Linkedin className="mr-2" />
                 LinkedIn
               </TabsTrigger>
-              <TabsTrigger value="facebook">
-                <Facebook className="mr-2" />
-                Facebook
-              </TabsTrigger>
               <TabsTrigger value="instagram">
                 <InstagramIcon className="mr-2 size-4" />
                 Instagram
+              </TabsTrigger>
+              <TabsTrigger value="facebook">
+                <Facebook className="mr-2" />
+                Facebook
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -826,11 +818,11 @@ export function SocialMediaPostComposer() {
           <TabsContent value="linkedin" className="p-0 m-0">
             {platformTabContent("linkedin")}
           </TabsContent>
-          <TabsContent value="facebook" className="p-0 m-0">
-            {platformTabContent("facebook")}
-          </TabsContent>
           <TabsContent value="instagram" className="p-0 m-0">
             {platformTabContent("instagram")}
+          </TabsContent>
+          <TabsContent value="facebook" className="p-0 m-0">
+            {platformTabContent("facebook")}
           </TabsContent>
         </Tabs>
       </Card>
