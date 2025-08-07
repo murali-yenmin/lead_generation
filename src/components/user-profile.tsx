@@ -12,6 +12,7 @@ import {
   import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
   import { LogOut, User } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
   
   export function UserProfile() {
     // In a real application, you'd fetch user data from a session or context
@@ -26,6 +27,14 @@ import Link from 'next/link';
         .split(' ')
         .map((n) => n[0])
         .join('');
+    };
+    const router = useRouter();
+
+      const handleLogout = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('authToken');
+        }
+        router.push('/auth/login');
     };
   
     return (
@@ -63,7 +72,7 @@ import Link from 'next/link';
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>

@@ -20,8 +20,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LogIn } from 'lucide-react';
+import { LogIn, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -34,6 +36,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function LoginPage() {
   const { toast } = useToast();
+  const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -44,20 +49,36 @@ export default function LoginPage() {
   });
 
   const onSubmit = (values: FormValues) => {
-    // This is where you would handle the login logic (e.g., call an API)
-    console.log('Login attempt with:', values);
-    toast({
-      title: 'Login Successful',
-      description: 'Welcome back!',
-    });
+    console.log(values,"values")
+    if (
+      values.email.toString() === 'yenmin@gmail.com' &&
+      values.password.toString() === 'Yenmin@1234#'
+    ) {
+      toast({
+        variant: 'success',
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', 'dummy_token_for_leadgenui');
+      }
+      
+      router.push('/socialmedia');
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Login Failed',
+        description: 'Invalid email or password. Please try again.',
+      });
+    }
   };
 
   return (
-    <main className="flex min-h-[calc(100vh-theme(spacing.14))] flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
+    <main className="flex min-h-screen flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl font-headline">
-            <LogIn className="size-8" />
+            {/* <LogIn className="size-8" /> */}
             Welcome Back
           </CardTitle>
           <CardDescription>
@@ -89,22 +110,28 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
-                      <Link
-                        href="/auth/forgot-password"
-                        className="text-sm text-muted-foreground hover:text-foreground"
+                      <div className="relative">
+                     <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          {...field}
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground"
+                        onClick={() => setShowPassword((prev) => !prev)}
                       >
-                        Forgot password?
-                      </Link>
+                        {showPassword ? <EyeOff /> : <Eye />}
+                        <span className="sr-only">
+                          {showPassword ? 'Hide password' : 'Show password'}
+                        </span>
+                      </Button>
                     </div>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        {...field}
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -115,14 +142,14 @@ export default function LoginPage() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="justify-center">
+        {/* <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?{' '}
             <Link href="/auth/register" className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </p>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </main>
   );
