@@ -49,13 +49,14 @@ export default function RegisterPage() {
     // This is where you would handle the registration logic (e.g., call an API)
     console.log('Registration attempt with:', values);
     toast({
+      variant: 'success',
       title: 'Registration Successful',
       description: 'Your account has been created.',
     });
   };
   
   return (
-    <main className="flex min-h-[calc(100vh-theme(spacing.14))] flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
+    <main className="flex min-h-screen flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl font-headline">

@@ -60,7 +60,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { reviewAndPostToLinkedIn } from "@/ai/flows/linkedin-review-and-post";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"; 
 import { postToLinkedIn } from "@/services/linkedin";
 
 const TwitterIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -100,12 +100,14 @@ const postComposerSchema = z.object({
 });
 
 type PostComposerValues = z.infer<typeof postComposerSchema>;
-type Platform = "all" | "linkedin" | "instagram" | "facebook" | "twitter";
+type Platform = "all" | "linkedin" |  "instagram" | "facebook" | "twitter";
 const platformOrder: Exclude<Platform, "all" | "twitter">[] = [
   "linkedin",
   "instagram",
   "facebook",
 ];
+const allPlatforms: Platform[] = ["linkedin", "instagram", "facebook", "twitter"];
+
 type Vibe = "professional" | "casual" | "witty" | "inspiring";
 
 function AIPromptDialog({
@@ -307,7 +309,7 @@ function ComposerFields({
                 </div>
 
                 <FormDescription>
-                  Upload an image, or generate one with AI.
+                  Upload an image, or generate one with AI based on your content.
                 </FormDescription>
                 <FormControl>
                   <ImageUpload
@@ -325,8 +327,7 @@ function ComposerFields({
                       onSelectFromHistory(image, index, field.onChange)
                     }
                   />
-                </FormControl>
-                {/* <FormMessage /> */}
+                </FormControl> 
               </FormItem>
             )}
           />
@@ -368,12 +369,6 @@ export function SocialMediaPostComposer() {
   const [aiDialogTopic, setAiDialogTopic] = useState("");
   const [aiDialogVibe, setAiDialogVibe] = useState<Vibe>("professional");
 
-  useEffect(() => {
-    // Reset AI dialog state when the active platform changes
-    setAiDialogTopic("");
-    setAiDialogVibe("professional");
-  }, [activePlatform]);
-
   const { toast } = useToast();
 
   const usePlatformForm = () =>
@@ -403,6 +398,27 @@ export function SocialMediaPostComposer() {
 
   const activeForm = platformForms[activePlatform];
 
+  // Sync "All Platforms" form changes to individual platform forms
+  const allPlatformsValues = allPlatformsForm.watch();
+  useEffect(() => {
+    if (activePlatform === 'all') {
+      const { postContent, keywords, images } = allPlatformsValues;
+      allPlatforms.forEach(p => {
+        const form = platformForms[p];
+        if (form.getValues('postContent') !== postContent) {
+          form.setValue('postContent', postContent, { shouldDirty: true, shouldValidate: true });
+        }
+        if (JSON.stringify(form.getValues('keywords')) !== JSON.stringify(keywords)) {
+          form.setValue('keywords', keywords, { shouldDirty: true, shouldValidate: true });
+        }
+        if (JSON.stringify(form.getValues('images')) !== JSON.stringify(images)) {
+          form.setValue('images', images, { shouldDirty: true, shouldValidate: true });
+        }
+      });
+    }
+  }, [allPlatformsValues, activePlatform]);
+
+
   const handleImagesChange = (
     fieldOnChange: (value: { name: string; url: string }[] | null) => void,
     images: { name: string; url: string }[] | null
@@ -411,7 +427,7 @@ export function SocialMediaPostComposer() {
 
     const platformsToUpdate: Platform[] =
       activePlatform === "all"
-        ? ["all", "linkedin", "instagram", "facebook", "twitter"]
+        ? ["all", ...allPlatforms]
         : [activePlatform];
 
     platformsToUpdate.forEach((p) => {
@@ -425,23 +441,24 @@ export function SocialMediaPostComposer() {
 
   const handleGeneratePost = async (topic: string, vibe: Vibe) => {
     setIsGeneratingText(true);
+    setAiDialogTopic(topic);
+    setAiDialogVibe(vibe);
     try {
       const result = await generateLinkedInPost({
         topic,
         vibe,
-        postType: "article", // Always generate an image for versatility
+       postType:'article'
       });
 
       const platformsToUpdate: Platform[] =
         activePlatform === "all"
-          ? ["all", "linkedin", "instagram", "facebook", "twitter"]
+          ? ["all", ...allPlatforms]
           : [activePlatform];
 
       platformsToUpdate.forEach((p) => {
         const form = platformForms[p];
         form.setValue("postContent", result.post, { shouldValidate: true });
         form.setValue("keywords", result.keywords, { shouldValidate: true });
-        setImageHistories((prev) => ({ ...prev, [p]: [] }));
       });
 
       toast({
@@ -449,7 +466,7 @@ export function SocialMediaPostComposer() {
         title: "Content Generated",
         description:
           activePlatform === "all"
-            ? "AI content and a relevant image have been populated across all tabs."
+            ? "AI content has been populated across all tabs."
             : `AI content has been generated for the ${activePlatform} tab.`,
       });
     } catch (error) {
@@ -468,7 +485,6 @@ export function SocialMediaPostComposer() {
     fieldOnChange: (value: ImageObject[] | null) => void
   ) => {
     const postContent = activeForm.getValues("postContent");
-
     if (!postContent || postContent.length < 20) {
       activeForm.setError("postContent", {
         type: "manual",
@@ -489,7 +505,7 @@ export function SocialMediaPostComposer() {
     try {
       const result = await generateImageForPost({
         postContent,
-        platform: activePlatform === "all" ? "linkedin" : activePlatform,
+        platform: activePlatform === 'all' ? 'linkedin' : activePlatform,
       });
 
       const newImage = {
@@ -499,7 +515,7 @@ export function SocialMediaPostComposer() {
 
       const platformsToUpdate: Platform[] =
         activePlatform === "all"
-          ? ["all", "linkedin", "instagram", "facebook", "twitter"]
+          ? ["all", ...allPlatforms]
           : [activePlatform];
 
       platformsToUpdate.forEach((p) => {
@@ -552,7 +568,7 @@ export function SocialMediaPostComposer() {
 
     const platformsToUpdate: Platform[] =
       activePlatform === "all"
-        ? ["all", "linkedin", "instagram", "facebook", "twitter"]
+        ? ["all", ...allPlatforms]
         : [activePlatform];
 
     platformsToUpdate.forEach((p) => {
@@ -624,6 +640,13 @@ export function SocialMediaPostComposer() {
       });
     } finally {
       setIsPosting(false);
+    }
+  };
+  
+  const handleNextClick = async () => {
+    const isValid = await allPlatformsForm.trigger(['postContent', 'keywords']);
+    if (isValid) {
+      setActivePlatform('linkedin');
     }
   };
 
@@ -756,7 +779,7 @@ export function SocialMediaPostComposer() {
           <CardFooter className="px-6 pb-6 pt-0 justify-end">
             <Button
               type="button"
-              onClick={() => setActivePlatform("linkedin")}
+              onClick={handleNextClick}
               disabled={isGeneratingText || isGeneratingImage}
             >
               Next

@@ -44,6 +44,7 @@ export default function ForgotPasswordPage() {
     // This is where you would call your backend to send a password reset link
     console.log('Password reset requested for:', values.email);
     toast({
+      variant: 'success',
       title: 'Password Reset Link Sent',
       description: `If an account exists for ${values.email}, a reset link has been sent.`,
     });
@@ -51,7 +52,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <main className="flex min-h-[calc(100vh-theme(spacing.14))] flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
+    <main className="flex min-h-screen flex-1 flex-col items-center justify-center gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl font-headline">

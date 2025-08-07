@@ -51,12 +51,12 @@ const generateImageForPostFlow = ai.defineFlow(
         Finally, translate that concept into a concise, descriptive, and visually interesting prompt for a text-to-image model.
 
         **Platform Guidelines:**
-        - **linkedin:** Generate a professional, clean image, typically in a 1.91:1 landscape aspect ratio.
+        - **linkedin:** Generate a professional, clean image, typically in a 1:1 landscape aspect ratio.
         - **instagram:** Generate a vibrant, eye-catching square (1:1) image.
-        - **facebook:** Generate a clear, engaging image, often in a 1.91:1 landscape or 1:1 square format.
+        - **facebook:** Generate a clear, engaging image, often in a  1:1 square format.
         - **twitter:** Generate a concise, meme-friendly, or informative image, typically in a 16:9 landscape format.
 
-        **IMPORTANT**: When no specific platform guidelines apply, or for an 'All Platforms' request, create a versatile square (1:1) image.
+        **IMPORTANT**: When no specific platform guidelines apply, or for an 'All Platforms' request, create a versatile square (1:1) image. Target output file size: under 1mb
 
         Post Content: "${postContent}"`,
         output: {
