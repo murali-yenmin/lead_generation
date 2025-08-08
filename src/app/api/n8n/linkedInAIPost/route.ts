@@ -1,18 +1,14 @@
 // app/api/n8n/linkedInAIPost/route.ts
 import { NextRequest, NextResponse } from "next/server";
-4
-const N8N_WEBHOOK_URL = "https://n8n-k70h.onrender.com/webhook/socialMedia";
+const N8N_WEBHOOK_URL = `${process.env.WEBHOOK_URL}/socialMedia`;
 
 export async function POST(req: NextRequest) {
   try {
-    const rawText = await req.text(); // bypass body size limit
+    const rawText = await req.text(); 
     const payload = JSON.parse(rawText);
 
     const res = await fetch(N8N_WEBHOOK_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method: "POST", 
       body: JSON.stringify(payload),
     });
 
@@ -21,8 +17,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: err }, { status: res.status });
     }
 
-    const data = await res.json();
+    const resText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(resText);
+    } catch {
+      data = { message: resText || "No response body" };
+    }
+
     return NextResponse.json(data);
+
   } catch (error: any) {
     console.error("API error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

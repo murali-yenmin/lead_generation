@@ -110,8 +110,8 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                      <div className="relative">
                      <FormLabel>Password</FormLabel>
+                      <div className="relative">
                       <FormControl>
                         <Input
                           type={showPassword ? 'text' : 'password'}
