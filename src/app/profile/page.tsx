@@ -51,8 +51,8 @@ export default function ProfilePage() {
   
   // In a real application, you'd fetch this from a session or context
   const [user, setUser] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: 'Yenmin Communications',
+    email: 'info@yenmin.com',
     image: null as string | null,
   });
 

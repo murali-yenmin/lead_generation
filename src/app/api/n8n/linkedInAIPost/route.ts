@@ -1,6 +1,6 @@
 // app/api/n8n/linkedInAIPost/route.ts
 import { NextRequest, NextResponse } from "next/server";
-const N8N_WEBHOOK_URL = `${process.env.WEBHOOK_URL}/socialMedia`;
+const N8N_WEBHOOK_URL = `${process.env.WEBHOOK_URL}/YenminSocialMedia`;
 
 export async function POST(req: NextRequest) {
   try {

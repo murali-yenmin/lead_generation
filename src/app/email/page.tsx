@@ -69,6 +69,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"; 
+import { emailSenderAll } from "@/services/email";
 
 const RecipientInput = ({
   id,
@@ -420,32 +421,32 @@ export default function EmailPage() {
   }, []);
 
   const handleSendEmail = async (values: FormValues) => {
-    const currentContent = editorRef.current?.innerHTML || "";
+    // const currentContent = editorRef.current?.innerHTML || "";
     setIsSending(true);
-    // try {
-    //   const result: any = await emailSenderAll(values);
-    //   console.log(result, "result");
-    //   if (result)
-    //     toast({
-    //       variant: "success",
-    //       title: "Email Sent!",
-    //       description: "Your email has been successfully sent.",
-    //     });
-    //   setIsSending(false);
-    // } catch (error) {
-    //   console.error("Error generating post:", error);
-    //   toast({
-    //     variant: "destructive",
-    //     title: "An error occurred",
-    //     description: "Failed to generate post. Please try again.",
-    //   });
-    //   setIsSending(false);
-    // }
-    form.reset();
-    if (editorRef.current) {
-      editorRef.current.innerHTML = "";
+    try {
+      const result: any = await emailSenderAll(values);
+      console.log(result, "result");
+      if (result)
+        toast({
+          variant: "success",
+          title: "Email Sent!",
+          description: "Your email has been successfully sent.",
+        });
+      setIsSending(false);
+    } catch (error) {
+      console.error("Error generating post:", error);
+      toast({
+        variant: "destructive",
+        title: "An error occurred",
+        description: "Failed to generate post. Please try again.",
+      });
+      setIsSending(false);
     }
-    setAttachments([]);
+    // form.reset();
+    // if (editorRef.current) {
+    //   editorRef.current.innerHTML = "";
+    // }
+    // setAttachments([]);
   };
 
   const handleGenerateEmail = async (prompt: string) => {

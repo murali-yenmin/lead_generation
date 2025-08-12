@@ -1,0 +1,17 @@
+{
+  "/api/n8n/linkedInAIPost/route": "app/api/n8n/linkedInAIPost/route.js",
+  "/api/n8n/linkedInCustomPostArtical/route": "app/api/n8n/linkedInCustomPostArtical/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/n8n/linkedInKey/route": "app/api/n8n/linkedInKey/route.js",
+  "/api/n8n/emailSender/route": "app/api/n8n/emailSender/route.js",
+  "/api/n8n/linkedInCustomPost/route": "app/api/n8n/linkedInCustomPost/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/google-ads/page": "app/google-ads/page.js",
+  "/auth/forgot-password/page": "app/auth/forgot-password/page.js",
+  "/email/page": "app/email/page.js",
+  "/auth/register/page": "app/auth/register/page.js",
+  "/socialmedia/page": "app/socialmedia/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
+}
