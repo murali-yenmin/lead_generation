@@ -12,7 +12,7 @@ import {
 const navItems = [
   // { href: '/dashboard', icon: <AreaChart />, label: 'Dashboard' },
   { href: "/socialmedia", icon: <Briefcase />, label: "Social Media" },
-  // { href: "/email", icon: <Mail />, label: "Email" },
+  { href: "/email", icon: <Mail />, label: "Email" },
   // { href: "/google-ads", icon: <Megaphone />, label: "Google Ads" },
 ];
 

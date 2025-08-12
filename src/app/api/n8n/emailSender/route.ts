@@ -1,22 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const N8N_WEBHOOK_URL = "https://n8n-k70h.onrender.com/webhook/emailSender";
+const N8N_WEBHOOK_URL = "https://n8n.yenmin.in/webhook-test/emailSender";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    // Forward the request to the n8n webhook using native fetch
-    const webhookResponse = await fetch(N8N_WEBHOOK_URL, {
-      method: "POST",
-      body: JSON.stringify(body),
+    const payload = await req.json();
+
+    console.log(payload,"payload ++")
+
+    const res = await fetch(N8N_WEBHOOK_URL, {
+      method: "POST", 
+      body: JSON.stringify(payload),
     });
-    const responseData = await webhookResponse.json();
-    // Return the response from the n8n webhook to the client
-    return NextResponse.json(responseData, { status: webhookResponse.status });
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Internal Server Error", error: error.message },
-      { status: 500 }
-    );
+
+    if (!res.ok) {
+      return NextResponse.json({ error: await res.text() }, { status: res.status });
+    }
+
+    return NextResponse.json(await res.json());
+  } catch (error) {
+    console.error("API error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
