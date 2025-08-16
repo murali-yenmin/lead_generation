@@ -14,12 +14,15 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { MainNav } from '@/components/main-nav';
+import { MainNav, defaultNavItems } from '@/components/main-nav';
 import { Logo } from '@/components/logo';
 import { UserProfile } from '@/components/user-profile';
 import { ReduxProvider } from '@/store/Provider';
 import { usePathname, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { checkInitialAuth } from '@/store/slices/authSlice';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,7 +44,6 @@ function AppLayout({ children }: { children: React.ReactNode }) {
             <Logo className="size-8" />
             <h1 className="text-xl font-headline font-semibold group-data-[collapsible=icon]:hidden">
               Auto Post
-
             </h1>
           </div>
         </SidebarHeader>
@@ -72,54 +74,91 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 justify-between">
+        <div className="flex items-center gap-2">
+          <Logo className="size-8" />
+          <h1 className="text-xl font-headline font-semibold">
+            Auto Post
+          </h1>
+        </div>
+      </header>
       <main className="flex-1">{children}</main>
     </div>
   );
 }
 
 function LoadingScreen() {
-  return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <Logo className="size-12 animate-pulse" />
-        <Skeleton className="h-8 w-48" />
-      </div>
-    </div>
-  )
+    return (
+        <div className="flex h-screen w-screen items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+                <Logo className="size-12 animate-pulse" />
+                <Skeleton className="h-8 w-48" />
+            </div>
+        </div>
+    )
 }
+
+function RootLayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, isAuthenticated, isLoading } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    dispatch(checkInitialAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return; // Do nothing while loading.
+    }
+
+    const isAuthPage = pathname.startsWith('/auth');
+
+    if (isAuthenticated) {
+        if (isAuthPage) {
+            router.push('/socialmedia');
+        } else if (pathname === '/') {
+             const userPermissions = user?.roleName === 'Super Admin' 
+                ? defaultNavItems.map(item => item.permission) 
+                : user?.permissions || [];
+             const firstNav = defaultNavItems.find(item => userPermissions.includes(item.permission));
+             if (firstNav) {
+                router.push(firstNav.href);
+             } else {
+                router.push('/socialmedia'); // Fallback
+             }
+        }
+    } else {
+        if (!isAuthPage) {
+            router.push('/auth/login');
+        }
+    }
+  }, [isAuthenticated, isLoading, pathname, router, user]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+  
+  if (!isAuthenticated && !pathname.startsWith('/auth')) {
+    return <LoadingScreen />;
+  }
+
+  if (isAuthenticated && pathname.startsWith('/auth')) {
+    return <LoadingScreen />;
+  }
+
+  const Layout = isAuthenticated ? AppLayout : AuthLayout;
+
+  return <Layout>{children}</Layout>;
+}
+
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    try {
-      const token = localStorage.getItem('authToken');
-      console.log(token,"token")
-      const isAuth = !!token;
-      setIsAuthenticated(isAuth);
-
-      if (!isAuth) {
-
-        router.push('/auth/login');
-
-      }
-    } catch (error) {
-      setIsAuthenticated(false);
-      if (!pathname.startsWith('/auth')) {
-        router.push('/auth/login');
-      }
-    }
-  }, [pathname, router]);
-
-
-  const Layout = isAuthenticated ? AppLayout : AuthLayout;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -134,11 +173,7 @@ export default function RootLayout({
         )}
       >
         <ReduxProvider>
-          {isAuthenticated === null ? (
-            <LoadingScreen />
-          ) : (
-            <Layout>{children}</Layout>
-          )}
+          <RootLayoutContent>{children}</RootLayoutContent>
         </ReduxProvider>
         <Toaster />
       </body>

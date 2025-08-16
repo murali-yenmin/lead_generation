@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -19,10 +20,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, KeyRound } from 'lucide-react';
+import { ArrowLeft, KeyRound, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -32,6 +35,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ForgotPasswordPage() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -40,15 +44,34 @@ export default function ForgotPasswordPage() {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    // This is where you would call your backend to send a password reset link
-    console.log('Password reset requested for:', values.email);
-    toast({
-      variant: 'success',
-      title: 'Password Reset Link Sent',
-      description: `If an account exists for ${values.email}, a reset link has been sent.`,
-    });
-    form.reset();
+  const onSubmit = async (values: FormValues) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post('/api/auth/forgot-password', values);
+
+      if (response.status === 200) {
+        toast({
+            variant: 'success',
+            title: 'Password Reset Link Sent',
+            description: `If an account exists for ${values.email}, a reset link has been sent. Please check your inbox.`,
+        });
+        form.reset();
+      }
+
+    } catch (error) {
+       const errorMessage =
+        axios.isAxiosError(error) && error.response
+          ? error.response.data.message
+          : 'An unexpected error occurred. Please try again.';
+
+      toast({
+        variant: 'destructive',
+        title: 'Request Failed',
+        description: errorMessage,
+      });
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -56,7 +79,7 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl font-headline">
-            <KeyRound className="size-8" />
+            {/* <KeyRound className="size-8" /> */}
             Forgot Your Password?
           </CardTitle>
           <CardDescription>
@@ -77,14 +100,16 @@ export default function ForgotPasswordPage() {
                         type="email"
                         placeholder="john.doe@example.com"
                         {...field}
+                        disabled={isLoading || form.formState.isSubmitSuccessful}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Send Reset Link
+              <Button type="submit" className="w-full" disabled={isLoading || form.formState.isSubmitSuccessful}>
+                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                 {isLoading ? 'Sending Link...' : 'Send Reset Link'}
               </Button>
             </form>
           </Form>

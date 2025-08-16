@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -22,10 +23,14 @@ import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LogIn, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { loginUser } from '@/store/slices/authSlice';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -37,8 +42,31 @@ type FormValues = z.infer<typeof formSchema>;
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
-    const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error: authError } = useSelector((state: RootState) => state.auth);
 
+
+  useEffect(() => {
+    const verified = searchParams.get('verified');
+    const error = searchParams.get('error');
+    if (verified) {
+      toast({
+        variant: 'success',
+        title: 'Account Verified!',
+        description: 'You can now log in to your account.',
+      });
+    }
+    if (error) {
+         toast({
+            variant: 'destructive',
+            title: 'Verification Failed',
+            description: error,
+        });
+    }
+  }, [searchParams, toast]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,28 +76,21 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values,"values")
-    if (
-      values.email.toString() === 'yenmin@gmail.com' &&
-      values.password.toString() === 'Yenmin@1234#'
-    ) {
-      toast({
-        variant: 'success',
-        title: 'Login Successful',
-        description: 'Welcome back!',
-      });
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', 'dummy_token_for_leadgenui');
-      }
-      
-      router.push('/socialmedia');
+  const onSubmit = async (values: FormValues) => {
+    const result = await dispatch(loginUser(values)); 
+    if (loginUser.fulfilled.match(result)) { 
+       toast({
+          variant: 'success',
+          title: 'Login Successful',
+          description: 'Welcome back!',
+        });
+        router.push('/socialmedia'); 
     } else {
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Invalid email or password. Please try again.',
-      });
+        toast({
+            variant: 'destructive',
+            title: 'Login Failed',
+            description: result.payload as string,
+        });
     }
   };
 
@@ -99,6 +120,7 @@ export default function LoginPage() {
                         type="email"
                         placeholder="john.doe@example.com"
                         {...field}
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -110,13 +132,22 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Password</FormLabel>
-                      <div className="relative">
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Link
+                        href="/auth/forgot-password"
+                        className="text-sm text-muted-foreground hover:text-foreground"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <div className="relative">
                       <FormControl>
                         <Input
                           type={showPassword ? 'text' : 'password'}
                           placeholder="••••••••"
                           {...field}
+                          disabled={isLoading}
                         />
                       </FormControl>
                       <Button
@@ -136,20 +167,42 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Log In
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && (
+                  <svg
+                    className="mr-2 h-4 w-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                )}
+                {isLoading ? 'Logging in...' : 'Log In'}
               </Button>
             </form>
           </Form>
         </CardContent>
-        {/* <CardFooter className="justify-center">
+        <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?{' '}
             <Link href="/auth/register" className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </p>
-        </CardFooter> */}
+        </CardFooter>
       </Card>
     </main>
   );

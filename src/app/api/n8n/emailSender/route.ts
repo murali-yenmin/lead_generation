@@ -1,24 +1,66 @@
-import { NextRequest, NextResponse } from "next/server";
 
-const N8N_WEBHOOK_URL = "https://n8n.yenmin.in/webhook-test/emailSender";
+import { NextRequest, NextResponse } from "next/server";
+import { verifyToken } from "@/lib/auth";
+import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function POST(req: NextRequest) {
   try {
-    const payload = await req.json();
+    // 1. Authenticate the user
+    const auth = verifyToken(req);
+    if (!auth.valid || !auth.decoded || typeof auth.decoded === 'string') {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+    
+    const { organizationId } = auth.decoded;
 
-    console.log(payload,"payload ++")
+    if (!organizationId) {
+        return NextResponse.json({ message: 'User is not associated with an organization.' }, { status: 400 });
+    }
+
+    // 2. Fetch organization settings
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    const organization = await db.collection('organizations').findOne({ _id: new ObjectId(organizationId as string) });
+
+    if (!organization) {
+        return NextResponse.json({ message: 'Organization not found.' }, { status: 404 });
+    }
+
+    const webhookPath = organization.settings?.emailUrl;
+
+    if (!webhookPath) {
+        return NextResponse.json({ message: 'Email webhook path is not configured for this organization.' }, { status: 400 });
+    }
+
+    // 3. Construct dynamic webhook URL
+    const N8N_WEBHOOK_URL = `${process.env.WEBHOOK_URL}/${webhookPath}`;
+
+    // 4. Forward the request
+    const payload = await req.json();
 
     const res = await fetch(N8N_WEBHOOK_URL, {
       method: "POST", 
+      // headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
-      return NextResponse.json({ error: await res.text() }, { status: res.status });
+      const err = await res.text();
+      return NextResponse.json({ error: err }, { status: res.status });
     }
 
-    return NextResponse.json(await res.json());
-  } catch (error) {
+    const resText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(resText);
+    } catch {
+      data = { message: resText || "No response body" };
+    }
+
+    return NextResponse.json(data);
+
+  } catch (error: any) {
     console.error("API error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

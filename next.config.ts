@@ -18,12 +18,7 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-  api: {
-    bodyParser: {
-      sizeLimit: "4mb",
-    },
-  },
+  }, 
   async rewrites() {
     return [
       {

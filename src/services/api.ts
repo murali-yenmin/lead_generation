@@ -1,6 +1,8 @@
 // src/services/api.ts
 
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { store } from '@/store/store';
+
 
 const api = axios.create({
   baseURL: "/",
@@ -12,8 +14,11 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log("Starting Request:", config);
-    return config;
-  },
+    const token = store.getState().auth.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;  },
   (error) => {
     console.error("Request Error:", error);
     return Promise.reject(error);

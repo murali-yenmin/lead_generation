@@ -1,13 +1,14 @@
 import { combineReducers } from '@reduxjs/toolkit';
-
-// This is a placeholder for a real reducer.
-const placeholderReducer = (state = {}, action) => {
-  return state;
-};
+import authReducer from './slices/authSlice';
+import usersReducer from './slices/usersSlice';
+import settingsReducer from './slices/settingsSlice';
+import clientsReducer from './slices/clientsSlice';
 
 const rootReducer = combineReducers({
-  // Add your reducers here
-  placeholder: placeholderReducer,
+  auth: authReducer,
+  users: usersReducer,
+  settings: settingsReducer,
+  clients: clientsReducer,
 });
 
 export default rootReducer;
