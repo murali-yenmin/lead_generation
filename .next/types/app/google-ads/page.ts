@@ -1,4 +1,4 @@
-// File: D:\murali\lead_generation\src\app\google-ads\page.tsx
+// File: D:\murali\AutoPost-n8n-Lead-Generation-tool\src\app\google-ads\page.tsx
 import * as entry from '../../../../src/app/google-ads/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

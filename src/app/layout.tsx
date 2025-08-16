@@ -73,7 +73,15 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col"> 
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 justify-between">
+        <div className="flex items-center gap-2">
+          <Logo className="size-8" />
+          <h1 className="text-xl font-headline font-semibold">
+            Auto Post
+          </h1>
+        </div>
+      </header>
       <main className="flex-1">{children}</main>
     </div>
   );
@@ -128,9 +136,9 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, isLoading, pathname, router, user]);
 
-  // if (isLoading) {
-  //   return <LoadingScreen />;
-  // }
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   
   if (!isAuthenticated && !pathname.startsWith('/auth')) {
     return <LoadingScreen />;

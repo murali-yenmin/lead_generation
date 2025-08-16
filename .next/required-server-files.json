@@ -102,7 +102,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\murali\\lead_generation",
+    "outputFileTracingRoot": "D:\\murali\\AutoPost-n8n-Lead-Generation-tool",
     "experimental": {
       "nodeMiddleware": false,
       "cacheLife": {
@@ -285,7 +285,7 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "D:\\murali\\lead_generation"
+      "root": "D:\\murali\\AutoPost-n8n-Lead-Generation-tool"
     },
     "_originalRewrites": {
       "beforeFiles": [],
@@ -298,7 +298,7 @@
       "fallback": []
     }
   },
-  "appDir": "D:\\murali\\lead_generation",
+  "appDir": "D:\\murali\\AutoPost-n8n-Lead-Generation-tool",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",
