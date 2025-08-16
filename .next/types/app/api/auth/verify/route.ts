@@ -1,4 +1,4 @@
-// File: D:\murali\AutoPost-n8n-Lead-Generation-tool\src\app\api\auth\verify\route.ts
+// File: D:\murali\lead_generation\src\app\api\auth\verify\route.ts
 import * as entry from '../../../../../../src/app/api/auth/verify/route.js'
 import type { NextRequest } from 'next/server.js'
 

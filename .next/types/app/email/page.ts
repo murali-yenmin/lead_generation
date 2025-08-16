@@ -1,4 +1,4 @@
-// File: D:\murali\AutoPost-n8n-Lead-Generation-tool\src\app\email\page.tsx
+// File: D:\murali\lead_generation\src\app\email\page.tsx
 import * as entry from '../../../../src/app/email/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
