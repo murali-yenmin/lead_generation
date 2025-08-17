@@ -24,7 +24,8 @@
 *.pem
 
 node_modules/
-# .next
+.next
+/next
 
 # debug
 npm-debug.log*
