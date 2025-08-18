@@ -18,7 +18,7 @@ export const SocialMediaPostGenerationInputSchema = z.object({
 });
 export type SocialMediaPostGenerationInput = z.infer<typeof SocialMediaPostGenerationInputSchema>;
 
-const SocialMediaPostGenerationOutputSchema = z.object({
+export const SocialMediaPostGenerationOutputSchema = z.object({
     post: z.string().describe('The generated social media post content.'),
     keywords: z.array(z.string()).describe('A list of 3-5 relevant keywords or hashtags for the post.'),
 });
