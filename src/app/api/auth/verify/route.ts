@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
@@ -6,7 +7,7 @@ export async function GET(req: NextRequest) {
   const token = searchParams.get('token');
 
   if (!token) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login?error=Verification token is missing.`);
+    return NextResponse.redirect(new URL('/auth/login?error=Verification token is missing.', req.url));
   }
 
   try {
@@ -17,23 +18,25 @@ export async function GET(req: NextRequest) {
     const user = await users.findOne({ verificationToken: token });
 
     if (!user) {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login?error=Invalid verification token.`);
+      return NextResponse.redirect(new URL('/auth/login?error=Invalid verification token.', req.url));
     }
-
-    // Token is valid, update user status to 'active' and remove the token
-    await users.updateOne(
-      { _id: user._id },
-      {
-        $set: { status: 'active' },
-        $unset: { verificationToken: "" },
-      }
-    );
     
-    // Redirect to login page with a success message
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login?verified=true`);
+    // If user is already active and just verifying again, let them proceed to reset password.
+    if (user.status !== 'active') {
+        // Token is valid, update user status to 'active' but leave token for password setup
+        await users.updateOne(
+          { _id: user._id },
+          {
+            $set: { status: 'active' },
+          }
+        );
+    }
+    
+    // Redirect to the password setup page with the token
+    return NextResponse.redirect(new URL(`/auth/reset-password?token=${token}`, req.url));
 
   } catch (error) {
     console.error('Verification API error:', error);
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login?error=An error occurred during verification.`);
+    return NextResponse.redirect(new URL('/auth/login?error=An error occurred during verification.', req.url));
   }
 }
