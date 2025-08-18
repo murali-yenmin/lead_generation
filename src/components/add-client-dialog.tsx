@@ -23,8 +23,8 @@ import { Loader2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Organization name must be at least 2 characters.' }),
-  domain: z.string().min(3, { message: 'Domain must be at least 3 characters.' }).refine(
+  name: z.string().trim().min(2, { message: 'Organization name must be at least 2 characters.' }),
+  domain: z.string().trim().min(3, { message: 'Domain must be at least 3 characters.' }).refine(
     (value) => /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(value),
     { message: 'Please enter a valid domain name (e.g., example.com).' }
   ),

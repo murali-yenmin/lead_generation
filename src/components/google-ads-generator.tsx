@@ -50,7 +50,7 @@ import { Skeleton } from "./ui/skeleton";
 import { TagInput } from "./ui/tag-input";
 
 const tagFormSchema = z.object({
-  prompt: z.string().min(10, {
+  prompt: z.string().trim().min(10, {
     message: "Prompt must be at least 10 characters.",
   }),
 });

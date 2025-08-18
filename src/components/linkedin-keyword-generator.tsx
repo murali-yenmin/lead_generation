@@ -32,7 +32,7 @@ import { Skeleton } from './ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 const formSchema = z.object({
-  prompt: z.string().min(10, {
+  prompt: z.string().trim().min(10, {
     message: 'Prompt must be at least 10 characters.',
   }),
   numberOfKeywords: z.coerce.number().min(1).max(25),

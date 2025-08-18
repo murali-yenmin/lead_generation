@@ -28,7 +28,7 @@ import { z } from 'zod';
 import axios from 'axios';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  email: z.string().trim().email({ message: 'Please enter a valid email address.' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;

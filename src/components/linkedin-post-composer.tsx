@@ -92,7 +92,7 @@ const imageSchema = z.object({
 export type ImageObject = z.infer<typeof imageSchema>;
 
 const postComposerSchema = z.object({
-  postContent: z.string().min(1, { message: "Post content cannot be empty." }),
+  postContent: z.string().trim().min(1, { message: "Post content cannot be empty." }),
   keywords: z
     .array(z.string())
     .min(1, { message: "Please add at least one keyword or hashtag." }),

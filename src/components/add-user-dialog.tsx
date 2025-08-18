@@ -25,8 +25,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, PlusCircle } from 'lucide-react';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  name: z.string().trim().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().trim().email({ message: 'Please enter a valid email address.' }),
   organizationId: z.string().min(1, { message: 'Please select an organization.' }),
   roleId: z.string().min(1, { message: 'Please select a role.' }),
   teamId: z.string().optional(),
@@ -92,14 +92,15 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded, currentUser }: 
     }
   }, [selectedOrgId, dispatch]);
 
-  const handleAddNewTeam = async () => {
-    if (!newTeamName.trim() || !selectedOrgId) return;
+   const handleAddNewTeam = async () => {
+    const trimmedName = newTeamName.trim();
+    if (!trimmedName || !selectedOrgId) return;
 
     try {
-        const result = await dispatch(createTeam({ organizationId: selectedOrgId, name: newTeamName })).unwrap();
+        const result = await dispatch(createTeam({ organizationId: selectedOrgId, name: trimmedName })).unwrap();
         toast({
             title: 'Team Created',
-            description: `Successfully created the "${newTeamName}" team.`,
+            description: `Successfully created the "${trimmedName}" team.`,
             variant: 'success'
         });
         form.setValue('teamId', result._id);

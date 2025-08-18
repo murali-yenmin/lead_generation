@@ -149,7 +149,7 @@ export default function ClientsPage() {
 
         return (
             <Badge variant={statusInfo.variant as any} className={statusInfo.className}>
-                <statusInfo.icon className="mr-1.5" />
+                <statusInfo.icon className="mr-1.5 h-4 w-4" />
                 {statusInfo.label}
             </Badge>
         )

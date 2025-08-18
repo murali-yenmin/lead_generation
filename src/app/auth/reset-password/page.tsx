@@ -28,8 +28,8 @@ import { z } from 'zod';
 import axios from 'axios';
 
 const formSchema = z.object({
-  password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
-  confirmPassword: z.string(),
+  password: z.string().trim().min(8, { message: 'Password must be at least 8 characters.' }),
+  confirmPassword: z.string().trim(),
 }).refine(data => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],

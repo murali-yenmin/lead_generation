@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { toast, useToast } from "@/hooks/use-toast";
 import {
   Mail,
   Send,
@@ -68,7 +68,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"; 
+} from "@/components/ui/form";
 import { emailSenderAll } from "@/services/email";
 
 const RecipientInput = ({
@@ -270,7 +270,16 @@ function AIPromptDialog({
   const [prompt, setPrompt] = useState("");
 
   const handleSubmit = async () => {
-    await onGenerate(prompt);
+    if (!prompt.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Prompt is required",
+        description:
+          "Please enter a description for the email you want to generate.",
+      });
+      return;
+    }
+    await onGenerate(prompt.trim());
     onOpenChange(false);
     setPrompt("");
   };
@@ -317,17 +326,18 @@ function AIPromptDialog({
 
 const formSchema = z.object({
   toRecipients: z
-    .array(z.string().email())
+    .array(z.string().trim().email())
     .min(1, { message: "Please add at least one recipient." }),
-  ccRecipients: z.array(z.string().email()).optional(),
-  bccRecipients: z.array(z.string().email()).optional(),
-  replyToRecipients: z.array(z.string().email()).optional(),
-  subject: z.string().min(1, { message: "Subject is required." }),
-  senderName: z.string().optional(),
+  ccRecipients: z.array(z.string().trim().email()).optional(),
+  bccRecipients: z.array(z.string().trim().email()).optional(),
+  replyToRecipients: z.array(z.string().trim().email()).optional(),
+  subject: z.string().trim().min(1, { message: "Subject is required." }),
+  senderName: z.string().trim().optional(),
   replyToSenderOnly: z.boolean().optional(),
   attachments: z.any().optional(),
   emailContent: z
     .string()
+    .trim()
     .min(1, { message: "Email content cannot be empty." }),
 });
 

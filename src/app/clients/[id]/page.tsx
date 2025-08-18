@@ -39,8 +39,8 @@ const getInitials = (name: string = '') => {
 };
 
 const settingsFormSchema = z.object({
-    socialMediaUrl: z.string().optional(),
-    emailUrl: z.string().optional(),
+    socialMediaUrl: z.string().trim().optional(),
+    emailUrl: z.string().trim().optional(),
 });
 type SettingsFormValues = z.infer<typeof settingsFormSchema>;
 
@@ -54,7 +54,7 @@ const StatusBadge = ({ status }: { status: 'active' | 'pending' | 'deactivated' 
 
     return (
         <Badge variant={statusInfo.variant as any} className={statusInfo.className}>
-            <statusInfo.icon className="mr-1.5" />
+            <statusInfo.icon className="mr-1.5 h-4 w-4" />
             {statusInfo.label}
         </Badge>
     )

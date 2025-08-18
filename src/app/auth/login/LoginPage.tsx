@@ -23,8 +23,8 @@ import { AppDispatch, RootState } from '@/store/store';
 import { loginUser } from '@/store/slices/authSlice';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email.' }),
-  password: z.string().min(1, { message: 'Password is required.' }),
+  email: z.string().trim().email({ message: 'Please enter a valid email.' }),
+  password: z.string().trim().min(1, { message: 'Password is required.' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;

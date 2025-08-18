@@ -193,7 +193,7 @@ export default function UsersPage() {
 
         return (
             <Badge variant={variant as any} className={className}>
-                <Icon className="mr-1.5" />
+                <Icon className="mr-1.5 h-4 w-4" />
                 {label}
             </Badge>
         )
