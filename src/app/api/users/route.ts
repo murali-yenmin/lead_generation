@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
         const result = await db.collection('users').insertOne(newUser);
         
         // 5. Send invitation email
-        const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password?token=${verificationToken}`;
+        const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/verify?token=${verificationToken}`;
         await sendInvitationEmail({ to: email, url: setupUrl });
 
         return NextResponse.json({ message: 'User created successfully and invitation sent.', userId: result.insertedId }, { status: 201 });
