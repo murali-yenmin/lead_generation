@@ -10,7 +10,6 @@
 
 import { ai } from "@/ai/genkit";
 import { z } from "genkit";
-import sharp from "sharp";
 
 const GenerateImageForPostInputSchema = z.object({
   postContent: z
@@ -29,13 +28,13 @@ export type GenerateImageForPostInput = z.infer<
 >;
 
 const GenerateImageForPostOutputSchema = z.object({
-  imageUrl: z.string().describe("The data URI of the generated image."),
+  imageUrl: z.string().describe("The hosted URL of the generated image."),
 });
 export type GenerateImageForPostOutput = z.infer<
   typeof GenerateImageForPostOutputSchema
 >;
 
-// ✅ Define platform-specific configs
+// ✅ Platform-specific configs
 const platformConfig: Record<string, { aspect: string; style: string }> = {
   linkedin: {
     aspect: "1080x1080",
@@ -56,22 +55,6 @@ const platformConfig: Record<string, { aspect: string; style: string }> = {
   },
 };
 
-// ✅ Fix image dimensions after generation
-async function validateAndFixImage(
-  imageUrl: string,
-  targetAspect: string
-): Promise<string> {
-  const [w, h] = targetAspect.split("x").map(Number);
-
-  const buffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
-
-  const fixedImage = await sharp(Buffer.from(buffer))
-    .resize(w, h, { fit: "cover" }) // crop/pad to fit
-    .toBuffer();
-
-  return `data:image/png;base64,${fixedImage.toString("base64")}`;
-}
-
 export async function generateImageForPost(
   input: GenerateImageForPostInput
 ): Promise<GenerateImageForPostOutput> {
@@ -85,12 +68,13 @@ const generateImageForPostFlow = ai.defineFlow(
     outputSchema: GenerateImageForPostOutputSchema,
   },
   async ({ postContent, platform }) => {
-    const { aspect, style } =
-      platformConfig[platform.toLowerCase()] || platformConfig.default;
+    try {
+      const { aspect, style } =
+        platformConfig[platform.toLowerCase()] || platformConfig.default;
 
-    // Step 1: Generate a refined prompt
-    const promptCreationResult = await ai.generate({
-      prompt: `You are a creative director planning the perfect image for a ${platform} post.
+      // Step 1: Generate a refined image prompt
+      const promptCreationResult = await ai.generate({
+        prompt: `You are a creative director planning the perfect image for a ${platform} post.
 Understand the post content below, then design the best image concept.
 
 Platform: ${platform}
@@ -100,35 +84,38 @@ Style: ${style}
 Post Content: "${postContent}"
 
 Respond ONLY with a concise prompt suitable for a text-to-image model.`,
-      output: {
-        format: "json",
-        schema: z.object({ imagePrompt: z.string() }),
-      },
-    });
+        output: {
+          format: "json",
+          schema: z.object({ imagePrompt: z.string() }),
+        },
+      });
 
-    const imagePrompt = promptCreationResult.output?.imagePrompt;
-    if (!imagePrompt) {
-      throw new Error(
-        "❌ Failed to generate an image prompt from the post content."
-      );
+      const imagePrompt = promptCreationResult.output?.imagePrompt;
+      if (!imagePrompt) {
+        console.error("❌ Image prompt missing:", promptCreationResult);
+        throw new Error("Failed to generate image prompt.");
+      }
+
+      // Step 2: Generate image directly from Gemini
+      const { media } = await ai.generate({
+        model: "googleai/gemini-2.0-flash-preview-image-generation",
+        prompt: `${imagePrompt}. Ensure aspect ratio ${aspect} and style: ${style}.`,
+        config: {
+          responseModalities: ["TEXT", "IMAGE"],
+        },
+      });
+
+      if (!media?.url) {
+        console.error("❌ Gemini returned no media:", media);
+        throw new Error("Image generation failed.");
+      }
+
+      // ✅ Return Gemini-hosted image URL (no sharp, no base64 memory issues)
+      return { imageUrl: media.url };
+
+    } catch (err) {
+      console.error("generateImageForPostFlow Error:", err);
+      throw err;
     }
-
-    // Step 2: Generate the image
-    const { media } = await ai.generate({
-      model: "googleai/gemini-2.0-flash-preview-image-generation",
-      prompt: `${imagePrompt}. Ensure aspect ratio ${aspect} and style: ${style}.`,
-      config: {
-        responseModalities: ["TEXT", "IMAGE"],
-      },
-    });
-
-    if (!media?.url) {
-      throw new Error("❌ Image generation failed.");
-    }
-
-    // Step 3: Validate & fix image dimensions
-    const fixedImageUrl = await validateAndFixImage(media.url, aspect);
-
-    return { imageUrl: fixedImageUrl };
   }
 );
