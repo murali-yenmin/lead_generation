@@ -50,6 +50,18 @@ export async function PATCH(
     if (typeof settings.emailUrl !== 'undefined') {
         updateData['settings.emailUrl'] = settings.emailUrl;
     }
+    if (typeof settings.linkedInAccessToken !== 'undefined') {
+        updateData['settings.linkedInAccessToken'] = settings.linkedInAccessToken;
+    }
+     if (typeof settings.linkedInId !== 'undefined') {
+        updateData['settings.linkedInId'] = settings.linkedInId;
+    }
+    if (typeof settings.facebookAccessToken !== 'undefined') {
+        updateData['settings.facebookAccessToken'] = settings.facebookAccessToken;
+    }
+     if (typeof settings.instagramAccessToken !== 'undefined') {
+        updateData['settings.instagramAccessToken'] = settings.instagramAccessToken;
+    }
     
     if (Object.keys(updateData).length === 0) {
         return NextResponse.json({ message: 'No valid settings to update.' }, { status: 400 });

@@ -1,6 +1,7 @@
+// next.config.ts
 import type { NextConfig } from "next";
-import type { Configuration, DefinePlugin } from "webpack";
 import path from "path";
+import webpack from "webpack";
 
 const nextConfig: NextConfig = {
   typescript: {
@@ -9,16 +10,36 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: {
+    images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "via.placeholder.com",
-        port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: '**.fbcdn.net',
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "graph.facebook.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.facebook.com",
+        pathname: "/**",
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cdninstagram.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
-  }, 
+  },
   async rewrites() {
     return [
       {
@@ -28,15 +49,14 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // ✅ Add Webpack override here
-  webpack(config: Configuration, { dev, isServer, webpack }) {
-    // Example 1: Add support for .wav files
+  webpack(config, { webpack }) {
+    // ✅ Support for .wav files
     config.module?.rules?.push({
       test: /\.wav$/,
       use: ["file-loader"],
     });
 
-    // Example 2: Add custom alias (like @/components)
+    // ✅ Custom alias
     if (config.resolve) {
       config.resolve.alias = {
         ...(config.resolve.alias || {}),
@@ -44,7 +64,7 @@ const nextConfig: NextConfig = {
       };
     }
 
-    // Example 3: Add custom DefinePlugin variable
+    // ✅ Add custom DefinePlugin variable
     config.plugins?.push(
       new webpack.DefinePlugin({
         __MY_CUSTOM_VAR__: JSON.stringify("custom_value"),

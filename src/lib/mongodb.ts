@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 const ALL_PERMISSIONS = [
   '/dashboard',
   '/socialmedia',
+  '/socialmediaSeo',
   '/email',
   '/google-ads',
   '/users',
@@ -59,12 +60,18 @@ async function initDatabase() {
       await roles.insertMany([
         { name: 'Super Admin', description: 'Full platform control', level: 100, permissions: ALL_PERMISSIONS },
         { name: 'Admin', description: 'Organization-level admin', level: 90, permissions: ALL_PERMISSIONS },
-        { name: 'Organization Owner', description: 'Manages own org & billing', level: 80, permissions: ['/dashboard', '/socialmedia', '/google-ads'] },
-        { name: 'Team Manager', description: 'Manages a specific team', level: 70, permissions: ['/dashboard', '/socialmedia'] },
-        { name: 'Marketer', description: 'Social media & campaigns', level: 60, permissions: ['/socialmedia', '/google-ads'] },
+        { name: 'Organization Owner', description: 'Manages own org & billing', level: 80, permissions: ['/dashboard', '/socialmedia', '/google-ads', '/socialmediaSeo'] },
+        { name: 'Team Manager', description: 'Manages a specific team', level: 70, permissions: ['/dashboard', '/socialmedia', '/socialmediaSeo'] },
+        { name: 'Marketer', description: 'Social media & campaigns', level: 60, permissions: ['/socialmedia', '/google-ads', '/socialmediaSeo'] },
         { name: 'Staff', description: 'Basic access', level: 50, permissions: ['/dashboard'] }
       ]);
       console.log('✅ Default roles seeded.');
+    } else {
+       // Patch existing roles with new permission if they don't have it
+       await roles.updateMany(
+           { name: { $in: ['Super Admin', 'Admin', 'Organization Owner', 'Team Manager', 'Marketer'] }, permissions: { $ne: '/socialmediaSeo' } },
+           { $addToSet: { permissions: '/socialmediaSeo' } }
+       )
     }
 
     // Ensure Super Admin user exists

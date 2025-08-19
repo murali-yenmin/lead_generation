@@ -165,6 +165,12 @@
       "namedRegex": "^/socialmedia(?:/)?$"
     },
     {
+      "page": "/socialmediaSeo",
+      "regex": "^/socialmediaSeo(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/socialmediaSeo(?:/)?$"
+    },
+    {
       "page": "/users",
       "regex": "^/users(?:/)?$",
       "routeKeys": {},

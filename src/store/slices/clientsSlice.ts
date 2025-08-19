@@ -14,6 +14,10 @@ export interface Client {
   settings?: {
     socialMediaUrl?: string;
     emailUrl?: string;
+    linkedInAccessToken?: string;
+    linkedInId?: string;
+    facebookAccessToken?: string;
+    instagramAccessToken?: string;
   };
 }
 
@@ -131,7 +135,7 @@ export const updateClientStatus = createAsyncThunk(
 
 export const updateClientSettings = createAsyncThunk(
     'clients/updateClientSettings',
-    async ({ clientId, settings }: { clientId: string; settings: { socialMediaUrl?: string, emailUrl?: string } }, { getState, rejectWithValue }) => {
+    async ({ clientId, settings }: { clientId: string; settings: { socialMediaUrl?: string, emailUrl?: string, linkedInAccessToken?: string, linkedInId?: string, facebookAccessToken?: string, instagramAccessToken?: string } }, { getState, rejectWithValue }) => {
         const { auth: { token } } = getState() as RootState;
         if (!token) return rejectWithValue('Not authenticated');
         try {
