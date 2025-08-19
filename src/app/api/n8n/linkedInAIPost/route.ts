@@ -8,11 +8,11 @@ export async function POST(req: NextRequest) {
   try {
     // 1. Authenticate the user
     const auth = verifyToken(req);
-    if (!auth.valid || !auth.decoded || typeof auth.decoded === 'string') {
+    if (!auth.valid || !auth.decoded || typeof auth.decoded === 'string' || !auth.decoded.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     
-    const { organizationId } = auth.decoded;
+    const { id: userId, organizationId } = auth.decoded;
 
     if (!organizationId) {
         return NextResponse.json({ message: 'User is not associated with an organization.' }, { status: 400 });
@@ -41,9 +41,9 @@ export async function POST(req: NextRequest) {
 
     const res = await fetch(N8N_WEBHOOK_URL, {
       method: "POST", 
-      headers: {
-        // 'Content-Type': 'application/json'
-      },
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // },
       body: JSON.stringify(payload),
     });
 
@@ -59,6 +59,19 @@ export async function POST(req: NextRequest) {
       data = JSON.parse(resText);
     } catch {
       data = { message: resText || "No response body" };
+    }
+
+    // 5. Save the post record to the database.
+    // MongoDB will automatically create the 'socialposts' collection if it doesn't exist.
+    if (data.id && data.media) {
+        const socialPostsCollection = db.collection('socialposts');
+        await socialPostsCollection.insertOne({
+            userId: new ObjectId(userId),
+            organizationId: new ObjectId(organizationId as string),
+            postId: data.id,
+            platform: data.media, 
+            postedAt: new Date(),
+        });
     }
 
     return NextResponse.json(data);
