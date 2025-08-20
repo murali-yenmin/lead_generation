@@ -48,7 +48,9 @@ const getInitials = (name: string = '') => {
 const settingsFormSchema = z.object({
     socialMediaUrl: z.string().trim().optional(),
     emailUrl: z.string().trim().optional(),
-    linkedInAccessToken: z.string().trim().optional(),
+    linkedInClientId: z.string().trim().optional(),
+    linkedInClientSecret: z.string().trim().optional(),
+    linkedInRefreshToken: z.string().trim().optional(),
     linkedInId: z.string().trim().optional(),
     facebookAccessToken: z.string().trim().optional(),
     instagramAccessToken: z.string().trim().optional(),
@@ -147,7 +149,9 @@ export default function ClientDetailPage() {
     defaultValues: {
         socialMediaUrl: '',
         emailUrl: '',
-        linkedInAccessToken: '',
+        linkedInClientId: '',
+        linkedInClientSecret: '',
+        linkedInRefreshToken: '',
         linkedInId: '',
         facebookAccessToken: '',
         instagramAccessToken: '',
@@ -198,7 +202,9 @@ export default function ClientDetailPage() {
         settingsForm.reset({
             socialMediaUrl: selectedClient.settings?.socialMediaUrl || '',
             emailUrl: selectedClient.settings?.emailUrl || '',
-            linkedInAccessToken: selectedClient.settings?.linkedInAccessToken || '',
+            linkedInClientId: selectedClient.settings?.linkedInClientId || '',
+            linkedInClientSecret: selectedClient.settings?.linkedInClientSecret || '',
+            linkedInRefreshToken: selectedClient.settings?.linkedInRefreshToken || '',
             linkedInId: selectedClient.settings?.linkedInId || '',
             facebookAccessToken: selectedClient.settings?.facebookAccessToken || '',
             instagramAccessToken: selectedClient.settings?.instagramAccessToken || '',
@@ -328,7 +334,7 @@ export default function ClientDetailPage() {
     );
   }
   
-  const isLinkedInConnected = selectedClient.settings?.linkedInAccessToken && selectedClient.settings?.linkedInId;
+  const isLinkedInConnected = selectedClient.settings?.linkedInRefreshToken && selectedClient.settings?.linkedInId;
 
   return (
     <main className="flex flex-1 flex-col gap-6 p-4 sm:px-6 md:gap-8 md:p-8">
@@ -455,6 +461,38 @@ export default function ClientDetailPage() {
                 <Form {...settingsForm}>
                     <form onSubmit={settingsForm.handleSubmit(onSettingsSubmit)}>
                         <CardContent className="space-y-4">
+                             <FormField
+                                control={settingsForm.control}
+                                name="linkedInClientId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="flex items-center gap-2">
+                                            <Key className="size-4" />
+                                            LinkedIn Client ID
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., 12345678" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={settingsForm.control}
+                                name="linkedInClientSecret"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="flex items-center gap-2">
+                                            <Key className="size-4" />
+                                            LinkedIn Client Secret
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input type="password" placeholder="••••••••••••••••••••" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={settingsForm.control}
                                 name="linkedInId"
@@ -473,12 +511,12 @@ export default function ClientDetailPage() {
                             />
                              <FormField
                                 control={settingsForm.control}
-                                name="linkedInAccessToken"
+                                name="linkedInRefreshToken"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="flex items-center gap-2">
                                             <Key className="size-4" />
-                                            LinkedIn Access Token
+                                            LinkedIn Refresh Token
                                         </FormLabel>
                                         <FormControl>
                                             <Input type="password" placeholder="••••••••••••••••••••" {...field} />

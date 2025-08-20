@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -50,8 +51,14 @@ export async function PATCH(
     if (typeof settings.emailUrl !== 'undefined') {
         updateData['settings.emailUrl'] = settings.emailUrl;
     }
-    if (typeof settings.linkedInAccessToken !== 'undefined') {
-        updateData['settings.linkedInAccessToken'] = settings.linkedInAccessToken;
+    if (typeof settings.linkedInClientId !== 'undefined') {
+        updateData['settings.linkedInClientId'] = settings.linkedInClientId;
+    }
+    if (typeof settings.linkedInClientSecret !== 'undefined') {
+        updateData['settings.linkedInClientSecret'] = settings.linkedInClientSecret;
+    }
+    if (typeof settings.linkedInRefreshToken !== 'undefined') {
+        updateData['settings.linkedInRefreshToken'] = settings.linkedInRefreshToken;
     }
      if (typeof settings.linkedInId !== 'undefined') {
         updateData['settings.linkedInId'] = settings.linkedInId;
@@ -59,7 +66,7 @@ export async function PATCH(
     if (typeof settings.facebookAccessToken !== 'undefined') {
         updateData['settings.facebookAccessToken'] = settings.facebookAccessToken;
     }
-     if (typeof settings.instagramAccessToken !== 'undefined') {
+    if (typeof settings.instagramAccessToken !== 'undefined') {
         updateData['settings.instagramAccessToken'] = settings.instagramAccessToken;
     }
     

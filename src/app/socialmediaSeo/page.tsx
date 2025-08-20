@@ -33,7 +33,7 @@ const TwitterIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.441c-3.111 0-3.473.012-4.69.068-2.578.118-3.966 1.51-4.084 4.084-.056 1.217-.067 1.575-.067 4.69s.011 3.473.067 4.69c.118 2.577 1.506 3.966 4.084 4.084 1.217.056 1.575.067 4.69.067s3.473-.011 4.69-.067c2.578-.118 3.966-1.506 4.084-4.084.056-1.217.067-1.575.067-4.69s-.011-3.473-.067-4.69c-.118-2.577-1.506-3.966-4.084-4.084-1.217-.056-1.575-.067-4.69-.067zm0 6.162c-2.304 0-4.173 1.869-4.173 4.173s1.869 4.173 4.173 4.173 4.173-1.869 4.173-4.173-1.869-4.173-4.173-4.173zm0 6.782c-1.442 0-2.609-1.167-2.609-2.609s1.167-2.609 2.609-2.609 2.609 1.167 2.609 2.609-1.167 2.609-2.609-2.609zm6.27-7.927c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z" />
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011 3.584.069-4.85c.149-3.225 1.664 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.441c-3.111 0-3.473.012-4.69.068-2.578.118-3.966 1.51-4.084 4.084-.056 1.217-.067 1.575-.067 4.69s.011 3.473.067 4.69c.118 2.577 1.506 3.966 4.084 4.084 1.217.056 1.575.067 4.69.067s3.473-.011 4.69-.067c2.578-.118 3.966-1.506 4.084-4.084.056-1.217.067-1.575.067-4.69s-.011-3.473-.067-4.69c-.118-2.577-1.506-3.966-4.084-4.084-1.217-.056-1.575-.067-4.69-.067zm0 6.162c-2.304 0-4.173 1.869-4.173 4.173s1.869 4.173 4.173 4.173 4.173-1.869 4.173-4.173-1.869-4.173-4.173-4.173zm0 6.782c-1.442 0-2.609-1.167-2.609-2.609s1.167-2.609 2.609-2.609 2.609 1.167 2.609 2.609-1.167 2.609-2.609-2.609zm6.27-7.927c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z" />
   </svg>
 );
 
@@ -155,15 +155,20 @@ export default function SocialMediaAnalyticsPage() {
                 const postContent = post.analytics.postContent || post.postContent;
                 return (
                     <div className="flex items-start gap-4">
-                        {imageUrl && (
-                             <div className="size-16 rounded-md overflow-hidden shrink-0">
-                                <Image src={imageUrl} alt="Post image" width={64} height={64} className="object-cover h-full w-full" />
-                             </div>
-                        )}
-                        <div className="space-y-1 max-w-[400px]">
+                        <div className="size-16 rounded-md overflow-hidden shrink-0 bg-muted">
+                            <Image 
+                                src={imageUrl || 'https://placehold.co/64x64.png?text=No+Image'} 
+                                alt="Post image" 
+                                width={64} 
+                                height={64} 
+                                className="object-cover h-full w-full"
+                                data-ai-hint="social media post"
+                            />
+                        </div>
+                        <div className="space-y-1 max-w-[350px]">
                             <p className="line-clamp-2 text-sm font-medium">{postContent}</p>
                             <div className="flex items-center gap-2">
-                                {platformIcons[post.platform.slice(0,400).toLowerCase()]}
+                                {platformIcons[post.platform.toLowerCase()]}
                                 <p className="text-xs text-muted-foreground">{format(new Date(post.postedAt), "PPp")}</p>
                             </div>
                         </div>
@@ -175,6 +180,9 @@ export default function SocialMediaAnalyticsPage() {
         { accessorKey: 'analytics.reach', header: 'Reach', cell: ({ row }) => row.original.analytics.reach.toLocaleString() },
         { accessorKey: 'analytics.likes', header: 'Likes', cell: ({ row }) => row.original.analytics.likes.toLocaleString() },
         { accessorKey: 'analytics.comments', header: 'Comments', cell: ({ row }) => row.original.analytics.comments.toLocaleString() },
+        { accessorKey: 'analytics.shares', header: 'Shares', cell: ({ row }) => row.original.analytics.shares.toLocaleString() },
+        { accessorKey: 'analytics.clicks', header: 'Clicks', cell: ({ row }) => row.original.analytics.clicks.toLocaleString() },
+        { accessorKey: 'analytics.saves', header: 'Saves', cell: ({ row }) => row.original.analytics.saves.toLocaleString() },
         { accessorKey: 'analytics.engagementRate', header: 'Eng. Rate', cell: ({ row }) => `${row.original.analytics.engagementRate}%` },
     ], []);
 

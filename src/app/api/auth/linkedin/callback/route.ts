@@ -63,6 +63,8 @@ export async function GET(req: NextRequest) {
         });
 
         const accessToken = tokenResponse.data.access_token;
+        const refreshToken = tokenResponse.data.refresh_token;
+
         if (!accessToken) {
             throw new Error('Access token not found in LinkedIn response.');
         }
@@ -100,9 +102,12 @@ export async function GET(req: NextRequest) {
             { _id: new ObjectId(state) },
             { 
                 $set: {
-                    'settings.linkedInAccessToken': accessToken,
+                    'settings.linkedInRefreshToken': refreshToken,
                     'settings.linkedInId': linkedInId,
                     'updatedAt': new Date(),
+                },
+                 $unset: {
+                    'settings.linkedInAccessToken': ''
                 }
             }
         );

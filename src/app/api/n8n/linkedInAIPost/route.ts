@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
             userId: new ObjectId(userId),
             organizationId: new ObjectId(organizationId as string),
             postId: data.id,
-            platform: data.media, 
+            platform: data.media.toLowerCase(), 
             postedAt: new Date(),
         });
     }

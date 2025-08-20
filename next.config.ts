@@ -10,36 +10,46 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-    images: {
-    remotePatterns: [
-      {
+   images: {
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "via.placeholder.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "placehold.co", // ✅ Add this line
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "**.fbcdn.net",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "graph.facebook.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "www.facebook.com",
+      pathname: "/**",
+    },
+    {
+      protocol: "https",
+      hostname: "**.cdninstagram.com",
+      pathname: "/**",
+    },
+    {
         protocol: "https",
-        hostname: "via.placeholder.com",
-        pathname: "/**",
+        hostname: "media.licdn.com",
+        pathname: "/**", // allow all LinkedIn media paths
       },
-      {
-        protocol: "https",
-        hostname: '**.fbcdn.net',
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "graph.facebook.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "www.facebook.com",
-        pathname: "/**",
-      },
-      {
-        protocol: 'https',
-        hostname: '**.cdninstagram.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
+  ],
+},
+
   async rewrites() {
     return [
       {

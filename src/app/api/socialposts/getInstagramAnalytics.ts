@@ -7,12 +7,12 @@ export const getInstagramAnalytics = async (post: any, organization: any) => {
   const postId = post.postId; // Instagram Media ID
 
   if (!accessToken) {
-    console.warn(`❌ Missing Instagram Access Token for ${organization?.name || "Org"}`);
+    // console.warn(`❌ Missing Instagram Access Token for ${organization?.name || "Org"}`);
     return zeroAnalytics();
   }
 
   if (!postId) {
-    console.warn(`❌ Missing Instagram Post ID for ${organization?.name || "Org"}`);
+    // console.warn(`❌ Missing Instagram Post ID for ${organization?.name || "Org"}`);
     return zeroAnalytics();
   }
 
@@ -27,8 +27,7 @@ export const getInstagramAnalytics = async (post: any, organization: any) => {
     if (!response.ok) {
       throw new Error(data.error?.message || "Instagram API request failed");
     }
-
-    console.log(`📊 Instagram media data for ${postId}:`, data);
+ 
 
     // ✅ Ensure likes & comments fallback
     let likes = data.like_count ?? 0;
@@ -100,7 +99,7 @@ export const getInstagramAnalytics = async (post: any, organization: any) => {
       permalink: data.permalink || "",
     };
   } catch (error) {
-    console.error(`❌ Error fetching Instagram analytics for post ${postId}:`, error);
+    // console.error(`❌ Error fetching Instagram analytics for post ${postId}:`, error);
     return zeroAnalytics();
   }
 };
