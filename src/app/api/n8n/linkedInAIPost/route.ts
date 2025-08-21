@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
     // MongoDB will automatically create the 'socialposts' collection if it doesn't exist.
     if (data.id && data.media) {
         const socialPostsCollection = db.collection('socialposts');
+        console.log("data +++++++++", data)
         await socialPostsCollection.insertOne({
             userId: new ObjectId(userId),
             organizationId: new ObjectId(organizationId as string),

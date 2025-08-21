@@ -54,7 +54,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/clients": {
+    "/auth/reset-password": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -67,8 +67,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/clients",
-      "dataRoute": "/clients.rsc",
+      "srcRoute": "/auth/reset-password",
+      "dataRoute": "/auth/reset-password.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -126,7 +126,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/": {
+    "/insights": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -139,8 +139,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/",
-      "dataRoute": "/index.rsc",
+      "srcRoute": "/insights",
+      "dataRoute": "/insights.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -198,30 +198,6 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/auth/reset-password": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/auth/reset-password",
-      "dataRoute": "/auth/reset-password.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/dashboard": {
       "experimentalBypassFor": [
         {
@@ -246,7 +222,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/google-ads": {
+    "/clients": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -259,32 +235,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/google-ads",
-      "dataRoute": "/google-ads.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/insights": {
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "Next-Action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/insights",
-      "dataRoute": "/insights.rsc",
+      "srcRoute": "/clients",
+      "dataRoute": "/clients.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -309,6 +261,54 @@
       "initialRevalidateSeconds": false,
       "srcRoute": "/users",
       "dataRoute": "/users.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/",
+      "dataRoute": "/index.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/google-ads": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "Next-Action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/google-ads",
+      "dataRoute": "/google-ads.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -370,8 +370,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "bb01a6761a37396fd15ea9d0532d6f71",
-    "previewModeSigningKey": "4d566329a1c49d32acdaaf1720e3938e83641557aa887a6bd87952db1c393675",
-    "previewModeEncryptionKey": "2fe60a556ca0620848fafefe367e0539247d8385b6e441c39fd988ec1d1684ac"
+    "previewModeId": "bdf5ecafae8a5237958e66005268b925",
+    "previewModeSigningKey": "62ef11ed0bd203b028049a296345bb9e2fe93c55d0ae876f4313ab17f0b95472",
+    "previewModeEncryptionKey": "18c1d5c82dbced2aca80ee5d568cd6b3bb3151edb9a6c55ec844712943a6cdd6"
   }
 }
