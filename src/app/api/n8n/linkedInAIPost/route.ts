@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
     const resText = await res.text();
     let data;
     try {
+      console.log(resText,"resText")
       data = JSON.parse(resText);
     } catch {
       data = { message: resText || "No response body" };
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
         await socialPostsCollection.insertOne({
             userId: new ObjectId(userId),
             organizationId: new ObjectId(organizationId as string),
-            postId: data.id,
+            postId: String(data.id),
             platform: data.media.toLowerCase(), 
             postedAt: new Date(),
         });
