@@ -11,7 +11,7 @@ import { RootState } from '@/store/store';
 export const defaultNavItems = [
   { href: '/dashboard', label: 'Dashboard', icon: <AreaChart />, permission: '/dashboard' },
   { href: '/socialmedia', label: 'Social Media', icon: <Briefcase />, permission: '/socialmedia' },
-  { href: '/socialmediaSeo', label: 'Social Media SEO', icon: <TrendingUp />, permission: '/socialmediaSeo' },
+  { href: '/insights', label: 'Insights', icon: <TrendingUp />, permission: '/insights' },
   { href: '/email', label: 'Email', icon: <Mail />, permission: '/email' },
   { href: '/google-ads', label: 'Google Ads', icon: <Megaphone />, permission: '/google-ads' },
   { href: '/users', label: 'Users', icon: <Users />, permission: '/users' },

@@ -29,7 +29,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const ALL_PERMISSIONS = [
   { id: '/dashboard', label: 'Dashboard' }, 
   { id: '/socialmedia', label: 'Social Media' },
-  { id: '/socialmediaSeo', label: 'Social Media SEO' },
+  { id: '/insights', label: 'Insights' },
   { id: '/email', label: 'Email' },
   { id: '/google-ads', label: 'Google Ads' },
 //   { id: '/users', label: 'User Management' },
