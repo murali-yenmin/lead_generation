@@ -1,9 +1,11 @@
 
+'use client';
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // ===== Interfaces =====
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -74,7 +76,25 @@ export const updateUserProfile = createAsyncThunk(
              return rejectWithValue(error.response?.data?.message || 'Profile update failed');
         }
     }
-)
+);
+
+export const fetchUserProfile = createAsyncThunk(
+  'auth/fetchUserProfile',
+  async (_, { rejectWithValue, getState }) => {
+    const { auth } = getState() as { auth: AuthState };
+    if (!auth.token) {
+      return rejectWithValue('Not authenticated');
+    }
+    try {
+      const response = await axios.get('/api/users/profile', {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch user profile');
+    }
+  }
+);
 
 
 // ===== Slice Definition =====
@@ -162,6 +182,13 @@ const authSlice = createSlice({
       .addCase(updateUserProfile.rejected, (state, action) => {
           // Optionally set an error state for profile updates
           console.error("Profile update failed:", action.payload);
+      })
+      // Fetch User Profile
+      .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<User>) => {
+        state.user = action.payload;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(action.payload));
+        }
       });
   },
 });

@@ -38,8 +38,8 @@ export function DataTablePagination({
         {/* {table.getFilteredSelectedRowModel().rows.length} of{' '} */}
         {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 lg:space-x-8">
+        <div className="hidden sm:flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select
             value={`${currentLimit}`}
@@ -48,7 +48,7 @@ export function DataTablePagination({
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue />
+              <SelectValue placeholder={currentLimit} />
             </SelectTrigger>
             <SelectContent side="top">
               {[10, 20, 30, 40, 50].map((pageSize) => (

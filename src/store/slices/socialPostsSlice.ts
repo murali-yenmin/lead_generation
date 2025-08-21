@@ -13,8 +13,11 @@ export interface PostAnalytics {
     clicks: number;
     saves: number;
     engagementRate: number;
+    eve: number;
     postContent?: string;
     imageUrl?: string;
+    leads: number; // Added
+    conversionRate: number; // Added
 }
 
 export interface SocialPost {
@@ -29,14 +32,30 @@ export interface SocialPost {
   analytics: PostAnalytics;
 }
 
-export interface AnalyticsSummary extends PostAnalytics {}
+export interface AnalyticsSummary {
+  impressions: number;
+  reach: number;
+  likes: number;
+  comments: number;
+  shares: number;
+  clicks: number;
+  saves: number;
+  eve: number;
+  engagementRate: number;
+  totalEngagements: number;
+    totalLeads: number; // Added
+
+}
+
 
 interface SocialPostsState {
   posts: SocialPost[];
   summary: AnalyticsSummary | null;
   totalPosts: number;
+  page: number;
+  limit: number;
   platformFilter: string;
-  dateRange: { from: Date | undefined, to: Date | undefined };
+  dateRange: { from: string | undefined, to: string | undefined };
   isLoading: boolean;
   error: string | null;
 }
@@ -46,6 +65,8 @@ const initialState: SocialPostsState = {
   posts: [],
   summary: null,
   totalPosts: 0,
+  page: 1,
+  limit: 10,
   platformFilter: 'all',
   dateRange: { from: undefined, to: undefined },
   isLoading: true,
@@ -64,15 +85,18 @@ export const fetchSocialPosts = createAsyncThunk(
     }
 
     try {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams({
+        page: postsState.page.toString(),
+        limit: postsState.limit.toString(),
+      });
       if (postsState.platformFilter !== 'all') {
         params.append('platform', postsState.platformFilter);
       }
       if (postsState.dateRange.from) {
-        params.append('dateFrom', postsState.dateRange.from.toISOString());
+        params.append('dateFrom', postsState.dateRange.from);
       }
        if (postsState.dateRange.to) {
-        params.append('dateTo', postsState.dateRange.to.toISOString());
+        params.append('dateTo', postsState.dateRange.to);
       }
       
       const response = await axios.get(`/api/socialposts?${params.toString()}`, {
@@ -95,9 +119,18 @@ const socialPostsSlice = createSlice({
   reducers: {
     setPlatformFilter: (state, action: PayloadAction<string>) => {
       state.platformFilter = action.payload;
+      state.page = 1;
     },
-    setDateRange: (state, action: PayloadAction<{ from: Date | undefined, to: Date | undefined }>) => {
+    setDateRange: (state, action: PayloadAction<{ from: string | undefined, to: string | undefined }>) => {
       state.dateRange = action.payload;
+      state.page = 1;
+    },
+     setSocialPostsPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+    setSocialPostsLimit: (state, action: PayloadAction<number>) => {
+      state.limit = action.payload;
+      state.page = 1; 
     },
   },
   extraReducers: (builder) => {
@@ -111,7 +144,9 @@ const socialPostsSlice = createSlice({
         state.isLoading = false;
         state.posts = action.payload.posts;
         state.totalPosts = action.payload.totalPosts;
-        state.summary = action.payload.summary;
+        const summary = action.payload.summary;
+        const totalEngagements = summary.likes + summary.comments + summary.shares + summary.clicks + summary.saves;
+        state.summary = { ...summary, totalEngagements };
       })
       .addCase(fetchSocialPosts.rejected, (state, action) => {
         state.isLoading = false;
@@ -120,6 +155,6 @@ const socialPostsSlice = createSlice({
   },
 });
 
-export const { setPlatformFilter, setDateRange } = socialPostsSlice.actions;
+export const { setPlatformFilter, setDateRange, setSocialPostsPage, setSocialPostsLimit } = socialPostsSlice.actions;
 
 export default socialPostsSlice.reducer;

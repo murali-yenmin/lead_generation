@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
+import { fetchUserProfile } from './authSlice';
 
 // ===== Interfaces =====
 export interface Role {
@@ -47,7 +48,7 @@ export const fetchRoles = createAsyncThunk(
 
 export const updateRolePermissions = createAsyncThunk(
   'settings/updateRolePermissions',
-  async ({ roleId, permissions }: { roleId: string; permissions: string[] }, { getState, rejectWithValue }) => {
+  async ({ roleId, permissions }: { roleId: string; permissions: string[] }, { getState, rejectWithValue, dispatch }) => {
     const { auth: { token } } = getState() as RootState;
     if (!token) return rejectWithValue('Not authenticated');
 
@@ -55,6 +56,9 @@ export const updateRolePermissions = createAsyncThunk(
       const response = await axios.put(`/api/roles/${roleId}`, { permissions }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // After successfully updating permissions, fetch the user profile again
+      // to get the latest permissions if the updated role affects the current user.
+      dispatch(fetchUserProfile());
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || 'Failed to update permissions.');

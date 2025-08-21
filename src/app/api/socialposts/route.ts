@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 import { getLinkedInAnalytics } from './getLinkedInAnalytics';
 import { getFacebookAnalytics } from './getFacebookAnalytics';
 import { getInstagramAnalytics } from './getInstagramAnalytics';
+import { zeroAnalytics } from '@/lib/zeroAnalytics';
 
 // Placeholder for Twitter analytics
 const getTwitterAnalytics = async (postId: string) => {
@@ -27,20 +28,40 @@ const getTwitterAnalytics = async (postId: string) => {
 }
 
 const getAnalyticsForPost = async (post: any, organization: any) => {
+    let analyticsData;
     switch (post.platform.toLowerCase()) {
         case 'linkedin':
-            return getLinkedInAnalytics(post, organization);
+            analyticsData = await getLinkedInAnalytics(post, organization);
+            break;
         case 'facebook':
-            return getFacebookAnalytics(post, organization);
+            analyticsData = await getFacebookAnalytics(post, organization);
+            break;
         case 'instagram':
-            return getInstagramAnalytics(post, organization);
+            analyticsData = await getInstagramAnalytics(post, organization);
+            break;
         case 'twitter':
-            return getTwitterAnalytics(post.postId);
+            analyticsData = await getTwitterAnalytics(post);
+            break;
         default:
             // Fallback to zeroed data for unknown platforms
-            return { impressions: 0, reach: 0, likes: 0, comments: 0, shares: 0, clicks: 0, saves: 0, engagementRate: 0, eve: 0 };
+            analyticsData = { ...zeroAnalytics(), postContent: post.postContent, imageUrl: post.imageUrl };
+            break;
     }
-};
+
+    // Simulate lead generation data
+    const conversionRateMin = 0.05; // 5%
+    const conversionRateMax = 0.15; // 15%
+    const conversionRate = Math.random() * (conversionRateMax - conversionRateMin) + conversionRateMin; 
+    const leads = Math.floor(analyticsData.clicks * conversionRate);
+    const leadConversionRate = analyticsData.reach > 0 ? (leads / analyticsData.reach) * 100 : 0;
+
+    return {
+        ...analyticsData,
+        leads,
+        conversionRate: parseFloat(leadConversionRate.toFixed(2)),
+    };
+
+}
 
 
 export async function GET(req: NextRequest) {

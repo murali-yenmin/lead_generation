@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -69,8 +69,7 @@ export default function LoginPage() {
         variant: 'success',
         title: 'Login Successful',
         description: 'Welcome back!',
-      });
-      router.push('/socialmedia');
+      }); 
     } else {
       toast({
         variant: 'destructive',
@@ -85,6 +84,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2 text-2xl font-headline">
+            <LogIn className="size-8" />
             Welcome Back
           </CardTitle>
           <CardDescription>
@@ -158,6 +158,7 @@ export default function LoginPage() {
 
               {/* Submit button */}
               <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? 'Logging in...' : 'Log In'}
               </Button>
             </form>

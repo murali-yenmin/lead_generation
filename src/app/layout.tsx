@@ -1,11 +1,10 @@
+"use client";
 
-'use client';
-
-import { useEffect, useState } from 'react';
-import { Inter, Space_Grotesk } from 'next/font/google';
-import './globals.css';
-import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/toaster';
+import { useEffect, useState } from "react";
+import { Inter, Space_Grotesk } from "next/font/google";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 import {
   Sidebar,
   SidebarContent,
@@ -13,26 +12,26 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/components/ui/sidebar';
-import { MainNav, defaultNavItems } from '@/components/main-nav';
-import { Logo } from '@/components/logo';
-import { UserProfile } from '@/components/user-profile';
-import { ReduxProvider } from '@/store/Provider';
-import { usePathname, useRouter } from 'next/navigation';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
-import { checkInitialAuth } from '@/store/slices/authSlice';
+} from "@/components/ui/sidebar";
+import { MainNav, defaultNavItems } from "@/components/main-nav";
+import { Logo } from "@/components/logo";
+import { UserProfile } from "@/components/user-profile";
+import { ReduxProvider } from "@/store/Provider";
+import { usePathname, useRouter } from "next/navigation"; 
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { checkInitialAuth } from "@/store/slices/authSlice";
+import { LoadingScreen } from "@/components/loadingScreen";
 
 const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-body',
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
 });
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-headline',
+  subsets: ["latin"],
+  variable: "--font-headline",
 });
 
 function AppLayout({ children }: { children: React.ReactNode }) {
@@ -73,70 +72,57 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col"> 
+    <div className="flex min-h-screen flex-col">
       <main className="flex-1">{children}</main>
     </div>
   );
 }
 
-export function LoadingScreen() {
-    return (
-        <div className="flex h-screen w-screen items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-                <Logo className="size-12 animate-pulse" />
-                <Skeleton className="h-8 w-48" />
-            </div>
-        </div>
-    )
-}
+
 
 function RootLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, isAuthenticated, isLoading } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   useEffect(() => {
     dispatch(checkInitialAuth());
   }, [dispatch]);
 
   useEffect(() => {
-    if (isLoading) {
-      return; // Do nothing while loading.
-    }
+    if (isLoading) return;
 
-    const isAuthPage = pathname.startsWith('/auth');
+    const isAuthPage = pathname.startsWith("/auth");
 
-    if (isAuthenticated) {
-        if (isAuthPage) {
-            router.push('/socialmedia');
-        } else if (pathname === '/') {
-             const userPermissions = user?.roleName === 'Super Admin' 
-                ? defaultNavItems.map(item => item.permission) 
-                : user?.permissions || [];
-             const firstNav = defaultNavItems.find(item => userPermissions.includes(item.permission));
-             if (firstNav) {
-                router.push(firstNav.href);
-             } else {
-                router.push('/socialmedia'); // Fallback
-             }
-        }
+    if (isAuthenticated && user) {
+      if (isAuthPage || pathname === "/") {
+        // Filter sidebar menu based on user permissions
+        const userPermissions =
+          user.roleName === "Super Admin"
+            ? defaultNavItems.map((item) => item.permission)
+            : user.permissions || [];
+
+        // Find the first sidebar item the user has permission for
+        const firstAllowedNav = defaultNavItems.find((item) =>
+          userPermissions.includes(item.permission)
+        );
+
+        if (firstAllowedNav) router.push(firstAllowedNav?.href);
+      }
     } else {
-        if (!isAuthPage) {
-            router.push('/auth/login');
-        }
+      if (!isAuthPage) router.push("/auth/login");
     }
   }, [isAuthenticated, isLoading, pathname, router, user]);
+ 
 
-  // if (isLoading) {
-  //   return <LoadingScreen />;
-  // }
-  
-  if (!isAuthenticated && !pathname.startsWith('/auth')) {
+  if (!isAuthenticated && !pathname.startsWith("/auth")) {
     return <LoadingScreen />;
   }
 
-  if (isAuthenticated && pathname.startsWith('/auth')) {
+  if (isAuthenticated && (pathname.startsWith("/auth") || pathname === "/")) {
     return <LoadingScreen />;
   }
 
@@ -144,7 +130,6 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
 
   return <Layout>{children}</Layout>;
 }
-
 
 export default function RootLayout({
   children,
@@ -159,7 +144,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased',
+          "min-h-screen bg-background font-body antialiased",
           inter.variable,
           spaceGrotesk.variable
         )}

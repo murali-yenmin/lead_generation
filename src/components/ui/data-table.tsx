@@ -14,7 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { DataTablePagination } from './data-table-pagination';
 
 export interface ColumnDef<TData> {
-  accessorKey: keyof TData | 'actions';
+  accessorKey?: keyof TData | 'actions' | 'permissions' | 'name';
+  id?: string;
   header: string;
   cell: (props: { row: { original: TData } }) => React.ReactNode;
 }
@@ -44,7 +45,7 @@ export function DataTable<TData>({
   onPageChange,
   currentLimit,
   onLimitChange,
-  hidePagination,
+  hidePagination = false,
 }: DataTableProps<TData>) {
 
   return (
@@ -54,8 +55,8 @@ export function DataTable<TData>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => (
-                <TableHead key={String(column.accessorKey)}>{column.header}</TableHead>
+              {columns.map((column, index) => (
+                <TableHead key={column.id || (column.accessorKey as string) || index}>{column.header}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -64,7 +65,7 @@ export function DataTable<TData>({
               [...Array(currentLimit)].map((_, i) => (
                 <TableRow key={i}>
                   {columns.map((column, j) => (
-                    <TableCell key={`${i}-${j}`}>
+                    <TableCell key={`${i}-${(column.id || (column.accessorKey as string) || j)}`}>
                       <Skeleton className="h-6" />
                     </TableCell>
                   ))}
@@ -78,9 +79,9 @@ export function DataTable<TData>({
               </TableRow>
             ) : data.length > 0 ? (
               data.map((row, i) => (
-                <TableRow key={i}>
-                  {columns.map((column) => (
-                    <TableCell key={String(column.accessorKey)}>
+                <TableRow key={(row as any)._id || i}>
+                  {columns.map((column, j) => (
+                    <TableCell key={(column.id || (column.accessorKey as string) || j)}>
                       {column.cell({ row: { original: row } })}
                     </TableCell>
                   ))}
@@ -96,14 +97,15 @@ export function DataTable<TData>({
           </TableBody>
         </Table>
       </div>
-      {hidePagination && 
-      <DataTablePagination
-        currentPage={currentPage}
-        pageCount={pageCount}
-        onPageChange={onPageChange}
-        currentLimit={currentLimit}
-        onLimitChange={onLimitChange}
-      />}
+      {!hidePagination && (
+          <DataTablePagination
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onPageChange={onPageChange}
+            currentLimit={currentLimit}
+            onLimitChange={onLimitChange}
+          />
+      )}
     </div>
   );
 }

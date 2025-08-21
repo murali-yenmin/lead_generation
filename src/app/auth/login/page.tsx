@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import LoginPage from "./LoginPage";
-import { LoadingScreen } from "@/app/layout";
+import { LoadingScreen } from "@/components/loadingScreen";
+ 
 
 export default function Page() {
   return (

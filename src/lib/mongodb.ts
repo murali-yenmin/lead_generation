@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 const ALL_PERMISSIONS = [
   '/dashboard',
   '/socialmedia',
-  '/socialmediaSeo',
+  '/socialmediaSeo', 
   '/email',
   '/google-ads',
   '/users',
